@@ -1,35 +1,28 @@
 package tutoring.Project.auth;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import tutoring.Project.base.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
-@Table(name = "User")
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
-    @JsonIgnore
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long userId;
 
-    @Column(name = "user_name", length = 50, unique = true)
-    private String username;
+    @Column(name = "id", length = 50, unique = true, nullable = false)
+    private String id;
 
-    @Column(name = "password", length = 100)
+    @Column(name = "password", length = 100, nullable = false)
     private String password;
 
-    @Column(name = "nickname", length = 50)
+    @Column(name = "nickname", length = 50, nullable = false)
     private String nickname;
-
-    @Column(name = "activated")
-    private boolean activated;
 
 }

@@ -7,7 +7,8 @@ abstract public class BaseDto<Entity extends BaseEntity> {
     protected String[] fillable;
 
     public Entity toEntity() {
-        Entity entity = (Entity) new BaseEntity();
-        return entity;
+//        Entity entity = (Entity) new {Entity}();
+//        return entity;
+        return null;
     }
 }

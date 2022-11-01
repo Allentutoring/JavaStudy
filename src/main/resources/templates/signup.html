@@ -5,17 +5,17 @@
 </head>
 <body>
 <h1>Please Sign Up</h1>
-<form th:action="@{/api/signup}" method="post">
+<form method="post" th:action="@{/api/signup}">
     <div>
-        <input type="text" name="name" placeholder="Username"/>
+        <input name="id" placeholder="ID" type="text"/>
     </div>
     <div>
-        <input type="text" name="nickname" placeholder="Nickname"/>
+        <input name="nickname" placeholder="Nickname" type="text"/>
     </div>
     <div>
-        <input type="password" name="password" placeholder="Password"/>
+        <input name="password" placeholder="Password" type="password"/>
     </div>
-    <input type="submit" value="Sign Up" />
+    <input type="submit" value="Sign Up"/>
 </form>
 </body>
 </html>

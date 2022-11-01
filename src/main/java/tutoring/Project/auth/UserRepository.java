@@ -1,11 +1,11 @@
 package tutoring.Project.auth;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import tutoring.Project.base.BaseRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends BaseRepository<User, Long> {
 
-    Optional<User> findOneWithAuthoritiesByUsername(String username);
+    Optional<User> findOneWithAuthoritiesById(String id);
 
 }

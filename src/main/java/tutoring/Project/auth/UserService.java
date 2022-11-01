@@ -16,27 +16,26 @@ public class UserService {
     @Transactional
     public User signup(UserDto userDto) {
 
-        if (userRepository.findOneWithAuthoritiesByUsername(userDto.getName()).orElse(null) != null) {
+        if (userRepository.findOneWithAuthoritiesById(userDto.getId()).orElse(null) != null) {
             throw new RuntimeException("이미 등록되어 있는 유저입니다.");
         }
 
         User user = User.builder()
-                .username(userDto.getName())
+                .id(userDto.getId())
                 .password(userDto.getPassword())
                 .nickname(userDto.getNickname())
-                .activated(true)
                 .build();
-
+        userRepository.delete(user);
         return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(String username) {
-        return userRepository.findOneWithAuthoritiesByUsername(username);
+    public Optional<User> getUserWithAuthorities(String id) {
+        return userRepository.findOneWithAuthoritiesById(id);
     }
 
     @Transactional(readOnly = true)
     public Optional<User> getMyUserWithAuthorities() {
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesById);
     }
 }
