@@ -1,28 +1,20 @@
 package tutoring.Project.auth;
 
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tutoring.Project.base.BaseController;
 
 @Controller
 @RequestMapping("/api")
 @AllArgsConstructor
-public class AuthController {
+public class AuthController extends BaseController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
-
-    @GetMapping("/signin")
-    public String signInPage() {
-        return "signin";
-    }
-
-    @GetMapping("/signup")
-    public String signUpPage() {
-        System.out.println("sign up page");
-        return "signup";
-    }
 
     @PostMapping("/signup")
     public ResponseEntity<User> signUp(UserDto userDto) {

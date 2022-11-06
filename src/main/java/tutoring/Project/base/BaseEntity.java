@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
 
     @Id
-    @Column(name = "idx")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    private Long id;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
