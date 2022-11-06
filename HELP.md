@@ -35,3 +35,9 @@ These additional references should also help you:
 
 https://www.baeldung.com/spring-deprecated-websecurityconfigureradapter   
 https://velog.io/@seongwon97/Spring-Security-Form-Login
+
+### JWT
+
+https://www.bezkoder.com/spring-boot-jwt-authentication/   
+https://github.com/murraco/spring-boot-jwt   
+https://github.com/SilverNine/spring-boot-jwt-tutorial

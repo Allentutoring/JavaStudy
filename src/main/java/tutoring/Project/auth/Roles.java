@@ -8,17 +8,17 @@ import tutoring.Project.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Authority extends BaseEntity {
+public class Roles extends BaseEntity {
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "authority")
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 36)
+    private Role name;
 }

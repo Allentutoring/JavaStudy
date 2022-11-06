@@ -5,9 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tutoring.Project.auth.User;
 import tutoring.Project.auth.UserDto;
 import tutoring.Project.auth.UserService;
+import tutoring.Project.auth.Users;
 
 import java.util.Optional;
 
@@ -19,12 +19,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    public ResponseEntity<Optional<User>> info() {
+    public ResponseEntity<Optional<Users>> info() {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signUp(UserDto userDto) {
+    public ResponseEntity<Users> signUp(UserDto userDto) {
         return ResponseEntity.ok(userService.signup(userDto));
     }
 

@@ -15,14 +15,14 @@ public class UserService {
 
 
     @Transactional
-    public User signup(UserDto userDto) {
+    public Users signup(UserDto userDto) {
 
         if (userRepository.findByEmail(userDto.getEmail()).orElse(null) != null) {
             throw new RuntimeException("이미 등록되어 있는 유저입니다.");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        User user = User.builder()
+        Users user = Users.builder()
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .nickname(userDto.getNickname())
@@ -34,17 +34,17 @@ public class UserService {
 
     @Transactional
     public void withdraw() {
-        Optional<User> user = SecurityUtil.getCurrentUsername().flatMap(userRepository::findByEmail);
+        Optional<Users> user = SecurityUtil.getCurrentUsername().flatMap(userRepository::findByEmail);
         userRepository.delete(user.get());
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(String email) {
+    public Optional<Users> getUserWithAuthorities(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getMyUserWithAuthorities() {
+    public Optional<Users> getMyUserWithAuthorities() {
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findByEmail);
     }
 }

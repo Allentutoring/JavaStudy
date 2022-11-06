@@ -4,7 +4,9 @@ import tutoring.Project.base.BaseRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends BaseRepository<User, Long> {
+public interface UserRepository extends BaseRepository<Users, Long> {
 
-    Optional<User> findByEmail(String email);
+    Optional<Users> findByEmail(String email);
+
+    Boolean existsByEmail(String email);
 }

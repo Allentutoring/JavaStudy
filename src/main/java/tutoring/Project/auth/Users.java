@@ -8,30 +8,41 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tutoring.Project.base.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity implements UserDetails {
+public class Users extends BaseEntity implements UserDetails {
 
+    @NotBlank
     @Email
-    @Column(name = "email", length = 50, unique = true, nullable = false)
+    @Column(name = "email", length = 32, unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", length = 100, nullable = false)
+    @NotBlank
+    @Column(name = "password", length = 256, nullable = false)
     private String password;
 
-    @Column(name = "nickname", length = 50, nullable = false)
+    @NotBlank
+    @Column(name = "nickname", length = 16, nullable = false)
     private String nickname;
 
     @Column(name = "enabled")
     private boolean enabled;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Roles> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

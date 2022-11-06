@@ -34,15 +34,21 @@ public class SecurityConfig {
                 .and()
                 // 로그인 실행
                 .formLogin()
+//                .oauth2ResourceServer(oauth2 -> oauth2.jwt());
                 // 로그인 실행 api 주소 설정
-                .loginPage("/api/signin")
+                // .loginPage("/api/signin")
                 .loginProcessingUrl("/api/signin")
+                .defaultSuccessUrl("/api/user", true)
+                // .failureUrl("/api/signin")
                 .usernameParameter("email")
                 .passwordParameter("password")
 //                .permitAll()
                 // 로그아웃 설정
                 .and()
                 .logout()
+                .logoutUrl("api/signout")
+                .deleteCookies("JSESSIONID")
+                // .logoutSuccessHandler(logoutSuccessHandler());
                 .permitAll();
         return http.build();
     }
