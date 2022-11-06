@@ -32,6 +32,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public void withdraw() {
+        Optional<User> user = SecurityUtil.getCurrentUsername().flatMap(userRepository::findByEmail);
+        userRepository.delete(user.get());
+    }
+
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities(String email) {
         return userRepository.findByEmail(email);

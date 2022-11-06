@@ -29,12 +29,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 // 페이지 권한 설정
-                .antMatchers("/", "/api/signup").permitAll()
+                .antMatchers("/", "/api/signin", "/api/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // 로그인 실행
                 .formLogin()
                 // 로그인 실행 api 주소 설정
+                .loginPage("/api/signin")
                 .loginProcessingUrl("/api/signin")
                 .usernameParameter("email")
                 .passwordParameter("password")
