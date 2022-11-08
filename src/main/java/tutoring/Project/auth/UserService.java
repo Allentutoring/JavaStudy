@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tutoring.Project.util.CustomerConverter;
+import tutoring.Project.util.Converter;
 import tutoring.Project.util.SecurityUtil;
 
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-    private final CustomerConverter converter;
+    private final Converter converter;
 
 
     @Transactional

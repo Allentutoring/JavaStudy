@@ -9,7 +9,7 @@ import tutoring.Project.base.BaseEntity;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerConverter {
+public class Converter {
     private final ModelMapper modelMapper;
 
     public <Entity extends BaseEntity> Entity convertDtoToEntity(BaseDto dto, Entity entity) {
