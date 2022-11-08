@@ -15,6 +15,8 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
     private final UserRepository userRepository;
+//    private final JwtTokenProvider jwtTokenProvider;
+//    private final AuthenticationManager authenticationManager;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -31,4 +33,12 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
+    /*public String signin(String email, String password) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            return jwtTokenProvider.createToken(email, userRepository.findByEmail(email).get().getAppUserRoles());
+        } catch (AuthenticationException e) {
+            throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }*/
 }

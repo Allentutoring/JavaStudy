@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import tutoring.Project.auth.CustomUserDetailsService;
+import tutoring.Project.jwt.JwtTokenFilterConfigurer;
+import tutoring.Project.jwt.JwtTokenProvider;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ import tutoring.Project.auth.CustomUserDetailsService;
 public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
     private final CustomUserDetailsService userDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -51,8 +54,16 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID")
                 // .logoutSuccessHandler(logoutSuccessHandler());
                 .permitAll();
+        http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
+
         return http.build();
     }
+
+    /*@Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+        return authenticationManager;
+    }*/
 
     /**
      * 전역으로 password 방식 설정

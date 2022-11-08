@@ -10,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,10 +33,10 @@ public class Users extends BaseEntity implements UserDetails {
     @NotBlank
     @Column(name = "nickname", length = 16, nullable = false)
     public String nickname;
-
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<Role> appUserRoles;
     @Column(name = "enabled")
     private boolean enabled;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
