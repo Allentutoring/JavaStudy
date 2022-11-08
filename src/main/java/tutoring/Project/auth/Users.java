@@ -1,9 +1,6 @@
 package tutoring.Project.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tutoring.Project.base.BaseEntity;
@@ -17,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,15 +23,15 @@ public class Users extends BaseEntity implements UserDetails {
     @NotBlank
     @Email
     @Column(name = "email", length = 32, unique = true, nullable = false)
-    private String email;
+    public String email;
 
     @NotBlank
     @Column(name = "password", length = 256, nullable = false)
-    private String password;
+    public String password;
 
     @NotBlank
     @Column(name = "nickname", length = 16, nullable = false)
-    private String nickname;
+    public String nickname;
 
     @Column(name = "enabled")
     private boolean enabled;
