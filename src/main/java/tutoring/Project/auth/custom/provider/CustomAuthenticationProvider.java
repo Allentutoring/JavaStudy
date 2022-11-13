@@ -8,11 +8,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
-import tutoring.Project.auth.entity.Users;
 
 @Slf4j
 @Component
@@ -32,15 +32,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("authenticate");
         log.info("email : {}", email);
 
-        Users user = (Users) userDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         // password 일치하지 않으면 throw exception
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
         }
-
+        log.info(userDetails.toString());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            user.getEmail(), null, user.getAuthorities()
+            userDetails.getUsername(), null, userDetails.getAuthorities()
         );
 
         return authenticationToken;

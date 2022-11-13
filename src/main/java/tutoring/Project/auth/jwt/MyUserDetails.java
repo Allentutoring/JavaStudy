@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import tutoring.Project.auth.repository.UserRepository;
-import tutoring.Project.auth.entity.Users;
+import tutoring.Project.auth.entity.User;
 
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ public class MyUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        final Optional<Users> user = userRepository.findByEmail(email);
+        final Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User '" + email + "' not found");

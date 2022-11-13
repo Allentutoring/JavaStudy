@@ -2,10 +2,19 @@ package tutoring.Project.auth.custom.config;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.aop.Advisor;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.authorization.method.AuthorizationManagerAfterMethodInterceptor;
+import org.springframework.security.authorization.method.AuthorizationManagerBeforeMethodInterceptor;
+import org.springframework.security.authorization.method.PostFilterAuthorizationMethodInterceptor;
+import org.springframework.security.authorization.method.PreFilterAuthorizationMethodInterceptor;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import tutoring.Project.auth.custom.provider.CustomAuthenticationProvider;
 import tutoring.Project.auth.custom.service.CustomUserDetailsService;
 
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
@@ -30,15 +40,12 @@ public class CustomSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests()
+            .httpBasic().and().authorizeRequests()
             // 페이지 권한 설정
             .antMatchers("/", "/api/signin", "/api/signup").permitAll()
-            .anyRequest().authenticated()
             .and()
             // 로그인 실행
             .formLogin()
-//                .oauth2ResourceServer(oauth2 -> oauth2.jwt());
             // 로그인 실행 api 주소 설정
             // .loginPage("/api/signin")
             .loginProcessingUrl("/api/signin")
@@ -52,12 +59,43 @@ public class CustomSecurityConfig {
             .logout()
             .logoutUrl("api/signout")
             .deleteCookies("JSESSIONID")
+            .permitAll()
             // .logoutSuccessHandler(logoutSuccessHandler());
-            .permitAll();
+            .and().csrf().disable();
         http.authenticationProvider(
             new CustomAuthenticationProvider(userDetailsService, passwordEncoder()));
         return http.build();
     }
+
+    /*@Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    Advisor preFilterAuthorizationMethodInterceptor() {
+        return new PreFilterAuthorizationMethodInterceptor();
+    }
+
+    @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    Advisor preAuthorizeAuthorizationMethodInterceptor() {
+        return AuthorizationManagerBeforeMethodInterceptor.preAuthorize();
+    }
+
+    @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    Advisor postAuthorizeAuthorizationMethodInterceptor() {
+        return AuthorizationManagerAfterMethodInterceptor.postAuthorize();
+    }
+
+    @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    Advisor postFilterAuthorizationMethodInterceptor() {
+        return new PostFilterAuthorizationMethodInterceptor();
+    }
+
+    @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    Advisor preAuthorize() {
+        return AuthorizationManagerBeforeMethodInterceptor.preAuthorize();
+    }*/
 
     /*
      * loadUserByUsername 함수를 이용하여 username(email) 에 해당하는 user 가 있는지 확인 하는 UserDetailService

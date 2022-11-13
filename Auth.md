@@ -126,3 +126,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 }
 
 ```
+
+
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)

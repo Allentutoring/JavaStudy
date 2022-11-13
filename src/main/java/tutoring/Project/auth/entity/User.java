@@ -1,18 +1,25 @@
 package tutoring.Project.auth.entity;
 
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import tutoring.Project.auth.Role;
-import tutoring.Project.base.entity.BaseEntity;
-
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import tutoring.Project.base.entity.BaseEntity;
 
 @Entity
 @Getter
@@ -20,7 +27,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users extends BaseEntity implements UserDetails {
+@ToString
+public class User extends BaseEntity implements UserDetails {
 
     @NotBlank
     @Email
@@ -34,19 +42,22 @@ public class Users extends BaseEntity implements UserDetails {
     @NotBlank
     @Column(name = "nickname", length = 16, nullable = false)
     public String nickname;
-    @ElementCollection(fetch = FetchType.EAGER)
-    List<Role> appUserRoles;
     @Column(name = "enabled")
     private boolean enabled;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Roles> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "users_roles",
+        joinColumns = @JoinColumn(
+            name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(
+            name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        ArrayList<GrantedAuthority> authList = new ArrayList<GrantedAuthority>(roles);
+        return authList;
     }
 
     @Override
