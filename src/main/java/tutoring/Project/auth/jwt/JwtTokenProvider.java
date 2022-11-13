@@ -1,4 +1,4 @@
-package tutoring.Project.jwt;
+package tutoring.Project.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import tutoring.Project.auth.Role;
-import tutoring.Project.exception.CustomException;
+import tutoring.Project.exception.exception.CustomException;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;

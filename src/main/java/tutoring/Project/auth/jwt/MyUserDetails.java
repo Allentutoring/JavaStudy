@@ -1,4 +1,4 @@
-package tutoring.Project.jwt;
+package tutoring.Project.auth.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package tutoring.Project.auth;
+package tutoring.Project.auth.custom.filter;
 
 import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.security.authentication.AuthenticationServiceException;

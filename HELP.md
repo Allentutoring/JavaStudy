@@ -31,6 +31,10 @@ These additional references should also help you:
 
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
 
+### Auth
+
+[Auth.md](Auth.md)
+
 ### Login Reference
 
 https://www.baeldung.com/spring-deprecated-websecurityconfigureradapter   

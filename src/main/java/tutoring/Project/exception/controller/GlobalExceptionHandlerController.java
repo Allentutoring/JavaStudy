@@ -1,4 +1,4 @@
-package tutoring.Project.exception;
+package tutoring.Project.exception.controller;
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import tutoring.Project.exception.exception.CustomException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandlerController {

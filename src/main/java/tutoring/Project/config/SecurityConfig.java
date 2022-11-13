@@ -4,26 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import tutoring.Project.auth.service.CustomUserDetailsService;
-import tutoring.Project.jwt.JwtTokenFilterConfigurer;
-import tutoring.Project.jwt.JwtTokenProvider;
+import tutoring.Project.auth.custom.service.CustomUserDetailsService;
+import tutoring.Project.auth.jwt.JwtTokenProvider;
 
-@EnableWebSecurity
+//@EnableWebSecurity
 @RequiredArgsConstructor
-@Configuration(proxyBeanMethods = false)
-@ConditionalOnDefaultWebSecurity
-@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+//@Configuration(proxyBeanMethods = false)
+//@ConditionalOnDefaultWebSecurity
+//@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SecurityConfig {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -54,7 +49,6 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID")
                 // .logoutSuccessHandler(logoutSuccessHandler());
                 .permitAll();
-        http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
 
         return http.build();
     }

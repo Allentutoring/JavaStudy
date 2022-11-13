@@ -1,9 +1,9 @@
-package tutoring.Project.jwt;
+package tutoring.Project.auth.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tutoring.Project.exception.CustomException;
+import tutoring.Project.exception.exception.CustomException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
