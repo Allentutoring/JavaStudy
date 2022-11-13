@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/JavaStudy?autoReconnect=true
+    username: allen
+    password: allen123!
+  session:
+    store-type: jdbc
+    jdbc:
+      table-name: SESSIONS
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+    database: mysql
+    show-sql: true
+# spring.security.oauth2.resourceserver.jwt.jwk-set-uri=
