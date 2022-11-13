@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import tutoring.Project.auth.CustomUserDetailsService;
+import tutoring.Project.auth.service.CustomUserDetailsService;
 import tutoring.Project.jwt.JwtTokenFilterConfigurer;
 import tutoring.Project.jwt.JwtTokenProvider;
 

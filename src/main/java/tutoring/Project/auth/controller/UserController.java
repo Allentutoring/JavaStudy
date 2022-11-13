@@ -1,13 +1,13 @@
-package tutoring.Project.user;
+package tutoring.Project.auth.controller;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tutoring.Project.auth.UserDto;
-import tutoring.Project.auth.UserService;
-import tutoring.Project.auth.Users;
+import tutoring.Project.auth.dto.UserDto;
+import tutoring.Project.auth.service.UserService;
+import tutoring.Project.auth.entity.Users;
 
 import java.util.Optional;
 

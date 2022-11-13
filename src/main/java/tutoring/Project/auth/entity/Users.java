@@ -1,9 +1,10 @@
-package tutoring.Project.auth;
+package tutoring.Project.auth.entity;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import tutoring.Project.base.BaseEntity;
+import tutoring.Project.auth.Role;
+import tutoring.Project.base.entity.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

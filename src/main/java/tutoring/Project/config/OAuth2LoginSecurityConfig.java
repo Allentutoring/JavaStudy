@@ -1,7 +1,7 @@
 package tutoring.Project.config;
 
 import lombok.RequiredArgsConstructor;
-import tutoring.Project.auth.UserRepository;
+import tutoring.Project.auth.repository.UserRepository;
 
 //@EnableWebSecurity
 @RequiredArgsConstructor

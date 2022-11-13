@@ -1,4 +1,4 @@
-package tutoring.Project.auth;
+package tutoring.Project.auth.controller;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import tutoring.Project.base.BaseController;
+import tutoring.Project.base.controller.BaseController;
 import tutoring.Project.util.SecurityUtil;
 
 import javax.servlet.http.HttpServletRequest;

@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import tutoring.Project.auth.UserRepository;
-import tutoring.Project.auth.Users;
+import tutoring.Project.auth.repository.UserRepository;
+import tutoring.Project.auth.entity.Users;
 
 import java.util.Optional;
 

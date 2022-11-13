@@ -3,9 +3,9 @@ package tutoring.Project.util;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import tutoring.Project.auth.UserDto;
-import tutoring.Project.base.BaseDto;
-import tutoring.Project.base.BaseEntity;
+import tutoring.Project.auth.dto.UserDto;
+import tutoring.Project.base.dto.BaseDto;
+import tutoring.Project.base.entity.BaseEntity;
 
 @Component
 @RequiredArgsConstructor

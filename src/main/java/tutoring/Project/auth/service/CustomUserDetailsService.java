@@ -1,4 +1,4 @@
-package tutoring.Project.auth;
+package tutoring.Project.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import tutoring.Project.auth.repository.UserRepository;
+import tutoring.Project.auth.entity.Users;
 
 @Service
 @RequiredArgsConstructor

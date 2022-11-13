@@ -1,4 +1,4 @@
-package tutoring.Project.base;
+package tutoring.Project.base.entity;
 
 import lombok.Getter;
 import lombok.Setter;

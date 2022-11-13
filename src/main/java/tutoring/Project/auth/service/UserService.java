@@ -1,4 +1,4 @@
-package tutoring.Project.auth;
+package tutoring.Project.auth.service;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tutoring.Project.auth.repository.UserRepository;
+import tutoring.Project.auth.entity.Users;
+import tutoring.Project.auth.dto.UserDto;
 import tutoring.Project.util.Converter;
 import tutoring.Project.util.SecurityUtil;
 

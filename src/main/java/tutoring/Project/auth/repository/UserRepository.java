@@ -1,6 +1,7 @@
-package tutoring.Project.auth;
+package tutoring.Project.auth.repository;
 
-import tutoring.Project.base.BaseRepository;
+import tutoring.Project.auth.entity.Users;
+import tutoring.Project.base.repository.BaseRepository;
 
 import java.util.Optional;
 
