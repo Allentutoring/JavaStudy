@@ -1,18 +1,16 @@
 package tutoring.Project.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
-
+@Slf4j
 public class SecurityUtil {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
     private SecurityUtil() {
     }
@@ -23,10 +21,11 @@ public class SecurityUtil {
      * @return
      */
     public static Optional<String> getCurrentUsername() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext()
+            .getAuthentication();
 
         if (authentication == null) {
-            logger.debug("Security Context에 인증 정보가 없습니다.");
+            log.info("Security Context에 인증 정보가 없습니다.");
             return Optional.empty();
         }
 
@@ -41,6 +40,7 @@ public class SecurityUtil {
     }
 
     public static void signOut(HttpServletRequest request, HttpServletResponse response) {
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        new SecurityContextLogoutHandler().logout(request, response,
+            SecurityContextHolder.getContext().getAuthentication());
     }
 }

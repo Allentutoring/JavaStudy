@@ -2,19 +2,11 @@ package tutoring.Project.auth.custom.config;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.aop.Advisor;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Role;
-import org.springframework.security.authorization.method.AuthorizationManagerAfterMethodInterceptor;
-import org.springframework.security.authorization.method.AuthorizationManagerBeforeMethodInterceptor;
-import org.springframework.security.authorization.method.PostFilterAuthorizationMethodInterceptor;
-import org.springframework.security.authorization.method.PreFilterAuthorizationMethodInterceptor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,8 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import tutoring.Project.auth.custom.provider.CustomAuthenticationProvider;
 import tutoring.Project.auth.custom.service.CustomUserDetailsService;
+import tutoring.Project.auth.repository.UserRepository;
 
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
@@ -32,6 +25,7 @@ import tutoring.Project.auth.custom.service.CustomUserDetailsService;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CustomSecurityConfig {
 
+    private final UserRepository userRepository;
     private final CustomUserDetailsService userDetailsService;
 
     /*
@@ -40,9 +34,11 @@ public class CustomSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .httpBasic().and().authorizeRequests()
+            .authorizeRequests()
             // 페이지 권한 설정
             .antMatchers("/", "/api/signin", "/api/signup").permitAll()
+            // redirect to login page if not authenticated
+            .anyRequest().authenticated()
             .and()
             // 로그인 실행
             .formLogin()
@@ -61,9 +57,11 @@ public class CustomSecurityConfig {
             .deleteCookies("JSESSIONID")
             .permitAll()
             // .logoutSuccessHandler(logoutSuccessHandler());
-            .and().csrf().disable();
-        http.authenticationProvider(
-            new CustomAuthenticationProvider(userDetailsService, passwordEncoder()));
+            .and().csrf().disable()
+            .authenticationProvider(
+                new CustomAuthenticationProvider(userDetailsService, passwordEncoder())
+            )
+        ;
         return http.build();
     }
 
@@ -81,20 +79,20 @@ public class CustomSecurityConfig {
 
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    Advisor preAuthorize() {
+        return AuthorizationManagerBeforeMethodInterceptor.preAuthorize();
+    }*/
+
+    /*@Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     Advisor postAuthorizeAuthorizationMethodInterceptor() {
         return AuthorizationManagerAfterMethodInterceptor.postAuthorize();
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     Advisor postFilterAuthorizationMethodInterceptor() {
         return new PostFilterAuthorizationMethodInterceptor();
-    }
-
-    @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    Advisor preAuthorize() {
-        return AuthorizationManagerBeforeMethodInterceptor.preAuthorize();
     }*/
 
     /*
@@ -102,7 +100,7 @@ public class CustomSecurityConfig {
      * */
     @Bean
     public UserDetailsService userDetailsService() {
-        return userDetailsService;
+        return new CustomUserDetailsService(userRepository);
     }
 
     /*

@@ -1,5 +1,10 @@
 ## Custom
 
+### Reference
+
+https://www.baeldung.com/spring-deprecated-websecurityconfigureradapter   
+https://velog.io/@seongwon97/Spring-Security-Form-Login
+
 ### Config
 
 - auth.custom.config.CustomSecurityConfig   
@@ -65,18 +70,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        final Optional<Users> userEntity = userRepository.findByEmail(email);
+        final Optional<User> userEntity = userRepository.findByEmail(email);
         if (userEntity.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
-        Users user = userEntity.get();
+        User user = userEntity.get();
 
-        return Users.builder()
-            .email(email)
-            .password(user.getPassword())
-            .nickname(user.getNickname())
-            .enabled(true)
-            .build();
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+            user.getPassword(), user.getAuthorities());
     }
 }
 ```
@@ -84,7 +85,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 ### AuthenticationProvider
 
 - auth.custom.provider.CustomAuthenticationProvider
-username(email) 과 password를 이용하여 로그인 여부를 설정
+  username(email) 과 password를 이용하여 로그인 여부를 설정
 
 ```java
 
@@ -101,19 +102,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         throws AuthenticationException {
         String email = authentication.getName();
         String password = (String) authentication.getCredentials();
-
-        log.info("authenticate");
-        log.info("email : {}", email);
-
-        Users user = (Users) userDetailsService.loadUserByUsername(email);
+        User userDetails = (User) userDetailsService.loadUserByUsername(email);
 
         // password 일치하지 않으면 throw exception
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            user.getEmail(), null, user.getAuthorities()
+            userDetails, userDetails.getId(), userDetails.getAuthorities()
         );
 
         return authenticationToken;
@@ -126,6 +123,3 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 }
 
 ```
-
-
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)

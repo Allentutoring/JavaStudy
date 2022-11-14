@@ -35,10 +35,9 @@ These additional references should also help you:
 
 [Auth.md](Auth.md)
 
-### Login Reference
+### Secured
 
-https://www.baeldung.com/spring-deprecated-websecurityconfigureradapter   
-https://velog.io/@seongwon97/Spring-Security-Form-Login
+[Secured.md](Secured.md)
 
 ### JWT
 

@@ -2,25 +2,25 @@ package tutoring.Project.auth.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tutoring.Project.auth.dto.UserDto;
 import tutoring.Project.auth.entity.Role;
+import tutoring.Project.auth.entity.User;
 import tutoring.Project.auth.repository.RoleRepository;
 import tutoring.Project.auth.repository.UserRepository;
-import tutoring.Project.auth.entity.User;
-import tutoring.Project.auth.dto.UserDto;
 import tutoring.Project.util.Converter;
 import tutoring.Project.util.SecurityUtil;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class UserService {
+
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -49,17 +49,22 @@ public class UserService {
         user.setEnabled(true);
 
         List<Role> roles = new ArrayList<>();
-        Role roleUser = roleRepository.findByName("USER");
-        Role roleADMIN = roleRepository.findByName("ADMIN");
+        Role roleUser = roleRepository.findByName("ROLE_USER");
         roles.add(roleUser);
-        roles.add(roleADMIN);
         user.setRoles(roles);
         return userRepository.save(user);
     }
 
     @Transactional
+    public User findById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.get();
+    }
+
+    @Transactional
     public void withdraw() {
-        Optional<User> user = SecurityUtil.getCurrentUsername().flatMap(userRepository::findByEmail);
+        Optional<User> user = SecurityUtil.getCurrentUsername()
+            .flatMap(userRepository::findByEmail);
         userRepository.delete(user.get());
     }
 
