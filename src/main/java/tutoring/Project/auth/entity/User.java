@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +21,6 @@ import tutoring.Project.base.entity.BaseEntity;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,15 +30,15 @@ public class User extends BaseEntity implements UserDetails {
     @NotBlank
     @Email
     @Column(name = "email", length = 32, unique = true, nullable = false)
-    public String email;
+    private String email;
 
     @NotBlank
     @Column(name = "password", length = 256, nullable = false)
-    public String password;
+    private String password;
 
     @NotBlank
     @Column(name = "nickname", length = 16, nullable = false)
-    public String nickname;
+    private String nickname;
     @Column(name = "enabled")
     private boolean enabled;
 

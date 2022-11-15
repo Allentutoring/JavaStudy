@@ -29,11 +29,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
 
-    @PreAuthorize("#id == authentication.principal.id")
-    @GetMapping("/user/{id}")
+    @PreAuthorize("isAuthenticated() && #user.id == authentication.principal.id")
+    @GetMapping("/user/{user}")
     public ResponseEntity<User> othersInfo(Authentication authentication,
-        @PathVariable("id") Long id) {
-        return ResponseEntity.ok(userService.findById(id));
+        @PathVariable("user") User user) {
+
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/signup")
