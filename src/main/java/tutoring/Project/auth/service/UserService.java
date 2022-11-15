@@ -45,14 +45,17 @@ public class UserService {
 
         User user = new User();
         converter.convertDtoToEntity(dto, user);
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setEnabled(true);
 
         List<Role> roles = new ArrayList<>();
         Role roleUser = roleRepository.findByName("ROLE_USER");
         roles.add(roleUser);
-        user.setRoles(roles);
-        return userRepository.save(user);
+        
+        return userRepository.save(
+            user.builder()
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .enabled(true)
+                .roles(roles).build()
+        );
     }
 
     @Transactional
