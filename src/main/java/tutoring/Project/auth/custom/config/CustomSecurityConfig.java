@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import tutoring.Project.auth.custom.filter.RequestResponseLoggingFilter;
 import tutoring.Project.auth.custom.provider.CustomAuthenticationProvider;
 import tutoring.Project.auth.custom.service.CustomUserDetailsService;
 import tutoring.Project.auth.repository.UserRepository;
@@ -94,6 +96,18 @@ public class CustomSecurityConfig {
     Advisor postFilterAuthorizationMethodInterceptor() {
         return new PostFilterAuthorizationMethodInterceptor();
     }*/
+
+    @Bean
+    public FilterRegistrationBean<RequestResponseLoggingFilter> loggingFilter() {
+        FilterRegistrationBean<RequestResponseLoggingFilter> registrationBean
+            = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new RequestResponseLoggingFilter());
+        registrationBean.addUrlPatterns("/users/*");
+        registrationBean.setOrder(2);
+
+        return registrationBean;
+    }
 
     /*
      * loadUserByUsername 함수를 이용하여 username(email) 에 해당하는 user 가 있는지 확인 하는 UserDetailService
