@@ -4,7 +4,6 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tutoring.Project.auth.dto.UserDto;
 import tutoring.Project.auth.entity.User;
+import tutoring.Project.auth.role.IsCurrentUser;
 import tutoring.Project.auth.service.UserService;
 
 @Slf4j
@@ -29,7 +29,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
 
-    @PreAuthorize("isAuthenticated() && #user.id == authentication.principal.id")
+    // @PreAuthorize("isAuthenticated() && #user.id == authentication.principal.id")
+    @IsCurrentUser
     @GetMapping("/user/{user}")
     public ResponseEntity<User> othersInfo(Authentication authentication,
         @PathVariable("user") User user) {

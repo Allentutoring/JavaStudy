@@ -20,7 +20,7 @@ import tutoring.Project.auth.custom.provider.CustomAuthenticationProvider;
 import tutoring.Project.auth.custom.service.CustomUserDetailsService;
 import tutoring.Project.auth.repository.UserRepository;
 
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 @EnableSpringDataWebSupport
 @EnableWebSecurity
 @RequiredArgsConstructor

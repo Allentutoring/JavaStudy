@@ -1,5 +1,9 @@
 ## Custom
 
+### Reference
+
+[PreAuthorize to Annotation](https://www.baeldung.com/spring-security-method-security)
+
 ### @EnableGlobalMethodSecurity
 
 - MethodSecurity는 말그대로 메소드 수준에서 권한을 제어할 수 있도록 해준다!   
