@@ -3,12 +3,12 @@ package tutoring.Project.auth.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
-import tutoring.Project.base.dto.BaseDto;
+import tutoring.Project.base.dto.BaseRequestDto;
 
 @Data
 @AllArgsConstructor
 @ToString
-public class UserDto extends BaseDto {
+public class UserDto extends BaseRequestDto {
 
     private String email;
 

@@ -1,7 +1,5 @@
 package tutoring.Project.auth.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,9 @@ import tutoring.Project.auth.repository.UserRepository;
 import tutoring.Project.base.controller.BaseController;
 import tutoring.Project.util.SecurityUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Slf4j
 @Controller
 @RequestMapping("/api")
@@ -25,6 +26,7 @@ public class AuthController extends BaseController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+
 
     @PostMapping("/sign/in")
     public ResponseEntity<String> signIn(UserDto dto) throws UserNotFoundException {

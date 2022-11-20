@@ -1,9 +1,9 @@
 package tutoring.Project.base.dto;
 
 import lombok.Getter;
-import tutoring.Project.base.entity.BaseEntity;
 
-abstract public class BaseDto<Entity extends BaseEntity> {
+public class BaseRequestDto {
+
     @Getter
     protected String[] fillable;
 

@@ -1,6 +1,7 @@
 package tutoring.Project.base.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Where;
@@ -15,8 +16,9 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @ToString
+@NoArgsConstructor
 @Where(clause = "deleted_at is null")
-public abstract class BaseEntity {
+public class BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -27,4 +29,5 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
+
 }
