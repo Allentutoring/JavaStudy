@@ -2,6 +2,7 @@ package tutoring.Project.auth.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,12 +50,11 @@ public class User extends BaseEntity implements UserDetails {
             name = "user_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(
             name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    private List<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<GrantedAuthority> authList = new ArrayList<GrantedAuthority>(roles);
-        return authList;
+        return roles;
     }
 
     @Override

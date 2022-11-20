@@ -10,9 +10,9 @@ import tutoring.Project.base.dto.BaseDto;
 @ToString
 public class UserDto extends BaseDto {
 
-    private String password;
-
     private String email;
+
+    private String password;
 
     private String nickname;
 

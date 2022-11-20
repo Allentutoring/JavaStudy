@@ -20,12 +20,12 @@ import tutoring.Project.auth.custom.provider.CustomAuthenticationProvider;
 import tutoring.Project.auth.custom.service.CustomUserDetailsService;
 import tutoring.Project.auth.repository.UserRepository;
 
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
-@EnableSpringDataWebSupport
-@EnableWebSecurity
+//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
+//@EnableSpringDataWebSupport
+//@EnableWebSecurity
 @RequiredArgsConstructor
-@Configuration(proxyBeanMethods = false)
-@ConditionalOnDefaultWebSecurity
+//@Configuration(proxyBeanMethods = false)
+//@ConditionalOnDefaultWebSecurity
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CustomSecurityConfig {
 
@@ -63,8 +63,7 @@ public class CustomSecurityConfig {
             // .logoutSuccessHandler(logoutSuccessHandler());
             .and().csrf().disable()
             .authenticationProvider(
-                new CustomAuthenticationProvider(userDetailsService, passwordEncoder())
-            )
+                new CustomAuthenticationProvider(userDetailsService, passwordEncoder()))
         ;
         return http.build();
     }

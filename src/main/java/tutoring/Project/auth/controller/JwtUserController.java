@@ -17,10 +17,10 @@ import tutoring.Project.auth.role.IsCurrentUser;
 import tutoring.Project.auth.service.UserService;
 
 @Slf4j
-//@RestController
-//@RequestMapping("/api")
+@RestController
+@RequestMapping("/api")
 @AllArgsConstructor
-public class UserController {
+public class JwtUserController {
 
     private final UserService userService;
 
