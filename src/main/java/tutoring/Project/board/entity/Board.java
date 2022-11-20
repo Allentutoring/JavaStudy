@@ -1,9 +1,6 @@
 package tutoring.Project.board.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import tutoring.Project.auth.entity.User;
 import tutoring.Project.base.entity.BaseEntity;
 
@@ -17,6 +14,7 @@ import javax.persistence.OneToOne;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Board extends BaseEntity {
 
     @Column(name = "title", length = 256)

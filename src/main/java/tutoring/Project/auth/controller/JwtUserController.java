@@ -9,6 +9,7 @@ import tutoring.Project.auth.entity.User;
 import tutoring.Project.auth.role.IsCurrentUser;
 import tutoring.Project.auth.service.UserService;
 import tutoring.Project.base.controller.BaseController;
+import tutoring.Project.base.dto.BaseResponseDto;
 
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
-public class JwtUserController extends BaseController<User> {
+public class JwtUserController extends BaseController<User, UserDto, BaseResponseDto> {
 
     private final UserService userService;
 
@@ -32,7 +33,7 @@ public class JwtUserController extends BaseController<User> {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
+    @PostMapping("sign/up")
     public ResponseEntity<User> signUp(UserDto userDto) {
         return ResponseEntity.ok(userService.signup(userDto));
     }

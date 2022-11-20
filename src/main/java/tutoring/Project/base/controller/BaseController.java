@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public abstract class BaseController<Entity extends BaseEntity> {
+public abstract class BaseController<Entity extends BaseEntity, RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto> {
 
     @GetMapping
     public <ResponseDto extends BaseResponseDto> ResponseEntity<List<ResponseDto>> info() {
         return ResponseEntity.ok(getService().index().stream().map(e -> {
             ResponseDto response = (ResponseDto) new BaseResponseDto();
-            response.setData(e);
+            response.bindEntity(e);
             return response;
         }).collect(Collectors.toList()));
     }
@@ -31,15 +31,19 @@ public abstract class BaseController<Entity extends BaseEntity> {
     @GetMapping("/{id}")
     public <ResponseDto extends BaseResponseDto> ResponseEntity<ResponseDto> show(@PathVariable("id") Entity entity) {
         ResponseDto response = (ResponseDto) new BaseResponseDto();
-        response.setData(entity);
+        response.bindEntity(entity);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/")
-    public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto> ResponseEntity<ResponseDto> store(RequestDto request) {
-        Entity entity = (Entity) getService().save(getConverter().convertDtoToEntity(request, (Entity) new BaseEntity()));
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<ResponseDto> store(@RequestBody RequestDto request) {
+        Entity entity = (Entity) new BaseEntity();
+        log.info(entity.toString());
+        log.info(request.toString());
+        getConverter().convertDtoToEntity(request, entity);
+        entity = (Entity) getService().save(entity);
         ResponseDto response = (ResponseDto) new BaseResponseDto();
-        response.setData(entity);
+        response.bindEntity(entity);
         return ResponseEntity.ok(response);
     }
 
