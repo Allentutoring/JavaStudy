@@ -44,14 +44,13 @@ public class CustomJwtSecurityConfig {
         http
             .csrf().disable()
             .httpBasic().disable()
-            .authorizeRequests()
+//            .authorizeRequests()
             // 페이지 권한 설정
-            .antMatchers("/", "/api/sign/in", "/api/sign/up").permitAll()
-            .anyRequest().authenticated()
-            // redirect to login page if not authenticated
-            // .anyRequest().authenticated()
-            .and()
-            .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+//            .antMatchers("/", "/api/sign/in", "/api/sign/up").permitAll()
+//            .anyRequest().authenticated()
+//            .and()
+            .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, userDetailsService),
+                UsernamePasswordAuthenticationFilter.class)
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }

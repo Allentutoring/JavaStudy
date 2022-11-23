@@ -1,8 +1,13 @@
 package tutoring.Project.auth.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +20,6 @@ import tutoring.Project.auth.repository.UserRepository;
 import tutoring.Project.base.controller.BaseController;
 import tutoring.Project.util.SecurityUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @Slf4j
 @Controller
 @RequestMapping("/api")
@@ -26,12 +28,20 @@ public class AuthController extends BaseController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
 
     @PostMapping("/sign/in")
     public ResponseEntity<String> signIn(UserDto dto) throws UserNotFoundException {
-        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(UserNotFoundException::new);
-        return ResponseEntity.ok(jwtTokenProvider.createToken(user.getEmail(), user.getRoles()));
+        User userDetails = (User) userDetailsService.loadUserByUsername(dto.getEmail());
+
+        // password 일치하지 않으면 throw exception
+        if (!passwordEncoder.matches(dto.getPassword(), userDetails.getPassword())) {
+            throw new BadCredentialsException("BadCredentialsException");
+        }
+        return ResponseEntity.ok(
+            jwtTokenProvider.createToken(userDetails.getEmail(), userDetails.getRoles()));
     }
 
     @GetMapping("/sign/out")
