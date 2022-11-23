@@ -6,11 +6,11 @@ import tutoring.Project.base.entity.BaseEntity;
 
 @Data
 @NoArgsConstructor
-public class BaseResponseDto {
+public class BaseResponseDto<Entity extends BaseEntity> {
 
     private Object data;
 
-    public void bindEntity(BaseEntity entity) {
+    public void bindEntity(Entity entity) {
         this.data = entity;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tutoring.Project.auth.role.IsCurrentEntity;
 import tutoring.Project.base.dto.BaseRequestDto;
 import tutoring.Project.base.dto.BaseResponseDto;
 import tutoring.Project.base.entity.BaseEntity;
@@ -22,7 +23,7 @@ import tutoring.Project.util.Converter;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public abstract class BaseController<Entity extends BaseEntity, RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto> {
+public abstract class ResourcesController<Entity extends BaseEntity, RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto> {
 
     @GetMapping
     public <ResponseDto extends BaseResponseDto> ResponseEntity<List<ResponseDto>> info() {
@@ -33,6 +34,7 @@ public abstract class BaseController<Entity extends BaseEntity, RequestDto exten
         }).collect(Collectors.toList()));
     }
 
+    @IsCurrentEntity
     @GetMapping("/{id}")
     public <ResponseDto extends BaseResponseDto> ResponseEntity<ResponseDto> show(
         @PathVariable("id") Entity entity) {
