@@ -1,5 +1,11 @@
 package tutoring.Project.base.entity;
 
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,9 +13,6 @@ import lombok.ToString;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
 
 
 @MappedSuperclass
@@ -19,7 +22,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Where(clause = "deleted_at is null")
 public class BaseEntity {
-
+    
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +32,5 @@ public class BaseEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
-
+    
 }
