@@ -23,7 +23,7 @@ import tutoring.Project.util.Converter;
 @RestController
 @RequiredArgsConstructor
 public abstract class BaseController<Entity extends BaseEntity, RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto> {
-
+    
     @GetMapping
     public <ResponseDto extends BaseResponseDto> ResponseEntity<List<ResponseDto>> info() {
         return ResponseEntity.ok(getService().index().stream().map(e -> {
@@ -32,15 +32,16 @@ public abstract class BaseController<Entity extends BaseEntity, RequestDto exten
             return response;
         }).collect(Collectors.toList()));
     }
-
+    
     @GetMapping("/{id}")
     public <ResponseDto extends BaseResponseDto> ResponseEntity<ResponseDto> show(
-        @PathVariable("id") Entity entity) {
+        @PathVariable("id") Entity entity
+    ) {
         ResponseDto response = (ResponseDto) new BaseResponseDto();
         response.bindEntity(entity);
         return ResponseEntity.ok(response);
     }
-
+    
     @PostMapping(consumes = "application/json")
     public ResponseEntity<ResponseDto> store(@RequestBody RequestDto request) {
         Entity entity = (Entity) new BaseEntity();
@@ -52,27 +53,31 @@ public abstract class BaseController<Entity extends BaseEntity, RequestDto exten
         response.bindEntity(entity);
         return ResponseEntity.ok(response);
     }
-
+    
     @PutMapping("/{id}")
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto> ResponseEntity<ResponseDto> update(
-        @PathVariable("id") Entity entity, RequestDto request) throws Exception {
+        @PathVariable("id") Entity entity,
+        RequestDto request,
+        RequestDto request2
+    ) throws Exception {
         return null;
     }
-
+    
     @DeleteMapping("/{id}")
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto> ResponseEntity<ResponseDto> delete(
-        @PathVariable("id") Entity entity) {
+        @PathVariable("id") Entity entity
+    ) {
         return null;
     }
-
+    
     protected Entity getEntity() {
         return null;
     }
-
+    
     protected BaseService<Entity, BoardRepository> getService() {
         return null;
     }
-
+    
     protected Converter getConverter() {
         return null;
     }
