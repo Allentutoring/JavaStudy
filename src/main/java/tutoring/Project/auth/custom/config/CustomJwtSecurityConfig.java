@@ -22,6 +22,8 @@ import tutoring.Project.auth.jwt.JwtSignKey;
 import tutoring.Project.auth.jwt.JwtTokenFilter;
 import tutoring.Project.auth.jwt.JwtTokenProvider;
 import tutoring.Project.auth.repository.UserRepository;
+import tutoring.Project.util.modelmapper.Converter;
+import tutoring.Project.util.modelmapper.impl.Convertable;
 
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 @EnableSpringDataWebSupport
@@ -31,35 +33,33 @@ import tutoring.Project.auth.repository.UserRepository;
 @ConditionalOnDefaultWebSecurity
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CustomJwtSecurityConfig {
-
+    
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-
+    
     /*
      * Route 설정 및 Custom AuthenticationProvider 설정
      * */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable()
-            .httpBasic().disable()
+        http.csrf().disable().httpBasic().disable()
 //            .authorizeRequests()
             // 페이지 권한 설정
 //            .antMatchers("/", "/api/sign/in", "/api/sign/up").permitAll()
 //            .anyRequest().authenticated()
 //            .and()
             .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, userDetailsService),
-                UsernamePasswordAuthenticationFilter.class)
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                UsernamePasswordAuthenticationFilter.class).sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
-
+    
     @Bean
     public Key jwtKey() {
         return new JwtSignKey();
     }
-
+    
     /*
      * loadUserByUsername 함수를 이용하여 username(email) 에 해당하는 user 가 있는지 확인 하는 UserDetailService
      * */
@@ -67,7 +67,7 @@ public class CustomJwtSecurityConfig {
     public UserDetailsService userDetailsService() {
         return new CustomUserDetailsService(userRepository);
     }
-
+    
     /*
      * 전역으로 password 방식 설정
      * */
@@ -75,9 +75,14 @@ public class CustomJwtSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
+    }
+    
+    @Bean
+    public Convertable convertable() {
+        return new Converter(modelMapper());
     }
 }
