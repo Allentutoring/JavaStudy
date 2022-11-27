@@ -83,20 +83,19 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         return cls.getDeclaredConstructor().newInstance();
     }
     
-    private <Instance> Instance createResponseInstance(
-        Class<Instance> cls,
+    public <ResponseDto extends BaseResponseDto<Entity>> ResponseDto createResponseInstance(
+        Class<ResponseDto> cls,
         Entity entity
     )
         throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        Instance instance;
+        ResponseDto dto;
         try {
-            instance = cls.getDeclaredConstructor(entity.getClass()).newInstance(entity);
-        } catch (Exception exception) {
-            log.info("catch NoSuchMethodException");
-            instance = (Instance) BaseResponseDto.class.getDeclaredConstructor(entity.getClass())
-                                                       .newInstance(entity);
+            dto = cls.getDeclaredConstructor(entity.getClass()).newInstance(entity);
+        } catch (NoSuchMethodException noSuchMethodException) {
+            dto = cls.getDeclaredConstructor().newInstance();
+            dto.bindEntity(entity);
         }
-        return instance;
+        return dto;
     }
     
     abstract protected BaseService<Entity, BoardRepository> getService();

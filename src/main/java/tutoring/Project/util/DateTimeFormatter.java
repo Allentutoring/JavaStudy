@@ -1,17 +1,17 @@
 package tutoring.Project.util;
 
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 
-public class DateTimeUtil {
+public class DateTimeFormatter {
     
-    protected String format = "Y-m-d";
+    protected String format = "Y-M-d H:m:s";
     
     public String getDateTime(
         Timestamp timestamp,
         String format
     ) {
-        return timestamp.toLocalDateTime().format(DateTimeFormatter.ofPattern(format));
+        return timestamp.toLocalDateTime()
+                        .format(java.time.format.DateTimeFormatter.ofPattern(format));
     }
     
     public String getDateTime(

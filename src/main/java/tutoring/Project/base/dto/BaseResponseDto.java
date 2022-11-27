@@ -1,21 +1,22 @@
 package tutoring.Project.base.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import tutoring.Project.base.entity.BaseEntity;
-import tutoring.Project.util.DateTimeUtil;
+import tutoring.Project.util.DateTimeFormatter;
 
-@Data
-@NoArgsConstructor
-abstract public class BaseResponseDto<Entity extends BaseEntity> {
+public class BaseResponseDto<Entity extends BaseEntity> {
     
-    protected DateTimeUtil dateTimeUtil;
+    protected DateTimeFormatter dateTimeUtil;
     
     {
-        this.dateTimeUtil = new DateTimeUtil();
+        this.dateTimeUtil = new DateTimeFormatter();
+    }
+    
+    public BaseResponseDto() {
+        this.init();
     }
     
     public BaseResponseDto(Entity entity) {
+        this.init();
         this.bindEntity(entity);
     }
     
@@ -23,5 +24,6 @@ abstract public class BaseResponseDto<Entity extends BaseEntity> {
     
     }
     
-    public abstract void bindEntity(Entity entity);
+    public void bindEntity(Entity entity) {
+    }
 }

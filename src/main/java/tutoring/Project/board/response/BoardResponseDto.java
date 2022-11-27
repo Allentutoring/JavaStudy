@@ -7,7 +7,6 @@ import tutoring.Project.board.entity.Board;
 @Data
 public class BoardResponseDto extends BaseResponseDto<Board> {
     
-    
     protected long id;
     protected String title;
     protected String content;
@@ -18,6 +17,6 @@ public class BoardResponseDto extends BaseResponseDto<Board> {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.createdAt = dateTimeUtil.getDateTime(entity.getCreatedAt());
+        this.createdAt = this.dateTimeUtil.getDateTime(entity.getCreatedAt());
     }
 }
