@@ -1,6 +1,6 @@
 package tutoring.Project.base.entity;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,8 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 
@@ -27,10 +27,10 @@ public class BaseEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    private Timestamp createdAt;
     @LastModifiedDate
-    private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
+    private Timestamp updatedAt;
+    private Timestamp deletedAt;
     
 }

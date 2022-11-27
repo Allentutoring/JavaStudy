@@ -19,7 +19,7 @@ import tutoring.Project.base.controller.BaseController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class JwtUserController extends BaseController<User> {
     
     private final UserService userService;
@@ -31,12 +31,12 @@ public class JwtUserController extends BaseController<User> {
     
     // @PreAuthorize("isAuthenticated() && #user.id == authentication.principal.id")
     @IsCurrentUser
-    @GetMapping("/{user}")
+    @GetMapping("/user/{user}")
     public ResponseEntity<User> show(@PathVariable("user") User user) {
         return ResponseEntity.ok(user);
     }
     
-    @PostMapping("sign/up")
+    @PostMapping("/sign/up")
     public ResponseEntity<User> signUp(UserDto userDto) {
         return ResponseEntity.ok(userService.signup(userDto));
     }

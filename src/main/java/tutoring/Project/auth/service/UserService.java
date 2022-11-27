@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tutoring.Project.auth.dto.UserDto;
@@ -13,7 +13,6 @@ import tutoring.Project.auth.entity.User;
 import tutoring.Project.auth.repository.RoleRepository;
 import tutoring.Project.auth.repository.UserRepository;
 import tutoring.Project.util.SecurityUtil;
-import tutoring.Project.util.modelmapper.Converter;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +20,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final Converter converter;
+    private final PasswordEncoder passwordEncoder;
     
     
     @Transactional
@@ -31,16 +30,12 @@ public class UserService {
             throw new RuntimeException("이미 등록되어 있는 유저입니다.");
         }
         
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        
-        User user = new User();
-        converter.convertDtoToEntity(dto, user);
-        
         List<Role> roles = new ArrayList<>();
         Role roleUser = roleRepository.findByName("ROLE_USER");
         roles.add(roleUser);
-        
         return userRepository.save(User.builder()
+                                       .email(dto.getEmail())
+                                       .nickname(dto.getNickname())
                                        .password(passwordEncoder.encode(dto.getPassword()))
                                        .enabled(true)
                                        .roles(roles)
