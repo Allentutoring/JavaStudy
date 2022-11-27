@@ -47,7 +47,7 @@ public class BoardController extends ResourcesController<Board> {
     }
     
     @Transactional()
-    @PreAuthorize("hasPermission(#board, 'write')")
+    @PreAuthorize("hasPermission(#user, 'board_write')")
     @PostMapping
     public ResponseEntity<BoardResponseDto> store(
         BoardRequestDto board,
