@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tutoring.Project.auth.entity.User;
 import tutoring.Project.auth.role.IsCurrentEntity;
 import tutoring.Project.base.controller.ResourcesController;
 import tutoring.Project.board.entity.Board;
@@ -39,17 +40,20 @@ public class BoardController extends ResourcesController<Board> {
     @IsCurrentEntity
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> show(
-        @PathVariable("id") Board board
+        @PathVariable("id") Board entity
     )
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        return super.show(board, BoardResponseDto.class);
+        return super.show(entity, BoardResponseDto.class);
     }
     
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional()
     @PostMapping
-    public ResponseEntity<BoardResponseDto> store(BoardRequestDto request)
+    public ResponseEntity<BoardResponseDto> store(
+        BoardRequestDto request,
+        @AuthenticationPrincipal User user
+    )
         throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        log.info(request.toString());
+        request.setUser(user);
         return super.store(Board.class, request, BoardResponseDto.class);
     }
     
@@ -57,18 +61,19 @@ public class BoardController extends ResourcesController<Board> {
     @IsCurrentEntity
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> update(
-        @PathVariable("id") Board board,
+        @PathVariable("id") Board entity,
         BoardRequestDto request
     )
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        return super.update(board, request, BoardResponseDto.class);
+        return super.update(entity, request, BoardResponseDto.class);
     }
     
     @Transactional
+    @IsCurrentEntity
     @DeleteMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board board)
+    public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board entity)
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        return super.delete(board, BoardResponseDto.class);
+        return super.delete(entity, BoardResponseDto.class);
     }
     
     @Override

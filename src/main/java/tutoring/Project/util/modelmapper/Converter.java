@@ -16,7 +16,9 @@ public class Converter implements Convertable {
     public Converter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         modelMapper.getConfiguration()
+                   .setMethodAccessLevel(AccessLevel.PUBLIC)
                    .setFieldAccessLevel(AccessLevel.PRIVATE)
+                   .setSkipNullEnabled(true)
                    .setFieldMatchingEnabled(true)
         // .setPropertyCondition(context -> !(context.getSource() instanceof PersistentCollection))
         ;

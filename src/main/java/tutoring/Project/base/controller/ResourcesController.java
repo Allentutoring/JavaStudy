@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tutoring.Project.base.dto.BaseRequestDto;
@@ -45,7 +44,6 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         return ResponseEntity.ok(response);
     }
     
-    @Transactional
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> store(
         Class<Entity> entityClass,
         RequestDto request,
@@ -65,7 +63,7 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
     )
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         getConvertable().convertDtoToEntity(request, entity);
-        getService().save(entity);
+        getService().update(entity);
         return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
     
