@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +38,6 @@ public class BoardController extends ResourcesController<Board> {
         return super.info(BoardResponseDto.class);
     }
     
-    @IsCurrentEntity
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> show(
         @PathVariable("id") Board entity
@@ -47,14 +47,15 @@ public class BoardController extends ResourcesController<Board> {
     }
     
     @Transactional()
+    @PreAuthorize("hasPermission(#board, 'write')")
     @PostMapping
     public ResponseEntity<BoardResponseDto> store(
-        BoardRequestDto request,
+        BoardRequestDto board,
         @AuthenticationPrincipal User user
     )
         throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        request.setUser(user);
-        return super.store(Board.class, request, BoardResponseDto.class);
+        board.setUser(user);
+        return super.store(Board.class, board, BoardResponseDto.class);
     }
     
     @Transactional

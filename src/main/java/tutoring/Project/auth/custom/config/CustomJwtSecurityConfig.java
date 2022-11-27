@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSe
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,6 +24,8 @@ import tutoring.Project.auth.jwt.JwtSignKey;
 import tutoring.Project.auth.jwt.JwtTokenFilter;
 import tutoring.Project.auth.jwt.JwtTokenProvider;
 import tutoring.Project.auth.repository.UserRepository;
+import tutoring.Project.base.evalutator.CustomMethodSecurityExpressionHandler;
+import tutoring.Project.base.evalutator.CustomPermissionEvaluator;
 import tutoring.Project.util.modelmapper.Converter;
 import tutoring.Project.util.modelmapper.impl.Convertable;
 
@@ -32,7 +36,7 @@ import tutoring.Project.util.modelmapper.impl.Convertable;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnDefaultWebSecurity
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class CustomJwtSecurityConfig {
+public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
@@ -49,10 +53,18 @@ public class CustomJwtSecurityConfig {
 //            .antMatchers("/", "/api/sign/in", "/api/sign/up").permitAll()
 //            .anyRequest().authenticated()
 //            .and()
-            .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, userDetailsService),
-                UsernamePasswordAuthenticationFilter.class).sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .addFilterBefore(
+                new JwtTokenFilter(jwtTokenProvider, userDetailsService),
+                UsernamePasswordAuthenticationFilter.class
+            ).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
+    }
+    
+    @Override
+    protected MethodSecurityExpressionHandler createExpressionHandler() {
+        CustomMethodSecurityExpressionHandler expressionHandler = new CustomMethodSecurityExpressionHandler();
+        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
+        return expressionHandler;
     }
     
     @Bean
