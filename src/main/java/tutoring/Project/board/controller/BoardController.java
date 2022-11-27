@@ -5,6 +5,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +45,7 @@ public class BoardController extends ResourcesController<Board> {
         return super.show(board, BoardResponseDto.class);
     }
     
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @PostMapping
     public ResponseEntity<BoardResponseDto> store(BoardRequestDto request)
         throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -50,6 +53,7 @@ public class BoardController extends ResourcesController<Board> {
         return super.store(Board.class, request, BoardResponseDto.class);
     }
     
+    @Transactional
     @IsCurrentEntity
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> update(
@@ -60,6 +64,7 @@ public class BoardController extends ResourcesController<Board> {
         return super.update(board, request, BoardResponseDto.class);
     }
     
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board board)
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {

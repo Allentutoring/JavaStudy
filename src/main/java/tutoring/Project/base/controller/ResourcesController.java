@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tutoring.Project.base.dto.BaseRequestDto;
@@ -40,10 +41,11 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         Class<ResponseDto> responseDtoClass
     )
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        ResponseDto response = newInstance(responseDtoClass, entity);
+        ResponseDto response = createResponseInstance(responseDtoClass, entity);
         return ResponseEntity.ok(response);
     }
     
+    @Transactional
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> store(
         Class<Entity> entityClass,
         RequestDto request,
@@ -53,7 +55,7 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         Entity entity = newInstance(entityClass);
         getConvertable().convertDtoToEntity(request, entity);
         getService().save(entity);
-        return ResponseEntity.ok(newInstance(responseDtoClass, entity));
+        return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
     
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> update(
@@ -64,7 +66,7 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         getConvertable().convertDtoToEntity(request, entity);
         getService().save(entity);
-        return ResponseEntity.ok(newInstance(responseDtoClass, entity));
+        return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
     
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> delete(
@@ -81,12 +83,20 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         return cls.getDeclaredConstructor().newInstance();
     }
     
-    private <Instance> Instance newInstance(
+    private <Instance> Instance createResponseInstance(
         Class<Instance> cls,
         Entity entity
     )
-        throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        return cls.getDeclaredConstructor(entity.getClass()).newInstance(entity);
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        Instance instance;
+        try {
+            instance = cls.getDeclaredConstructor(entity.getClass()).newInstance(entity);
+        } catch (Exception exception) {
+            log.info("catch NoSuchMethodException");
+            instance = (Instance) BaseResponseDto.class.getDeclaredConstructor(entity.getClass())
+                                                       .newInstance(entity);
+        }
+        return instance;
     }
     
     abstract protected BaseService<Entity, BoardRepository> getService();

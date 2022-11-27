@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -30,6 +31,7 @@ public class BaseEntity {
     @CreationTimestamp
     private Timestamp createdAt;
     @LastModifiedDate
+    @UpdateTimestamp
     private Timestamp updatedAt;
     private Timestamp deletedAt;
     
