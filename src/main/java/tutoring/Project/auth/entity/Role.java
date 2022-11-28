@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import tutoring.Project.base.entity.BaseEntity;
 
 @Entity
@@ -19,7 +18,7 @@ import tutoring.Project.base.entity.BaseEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends BaseEntity implements GrantedAuthority {
+public class Role extends BaseEntity {
 
     @Column(length = 36, unique = true)
     private String name;
@@ -33,8 +32,4 @@ public class Role extends BaseEntity implements GrantedAuthority {
             name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges;
 
-    @Override
-    public String getAuthority() {
-        return name;
-    }
 }
