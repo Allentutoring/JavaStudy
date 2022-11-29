@@ -29,15 +29,15 @@ import tutoring.Project.util.modelmapper.impl.Convertable;
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
 public class BoardController extends ResourcesController<Board> {
-    
+
     private final Convertable convertable;
     private final BoardService service;
-    
+
     @GetMapping
     public ResponseEntity<List<BoardResponseDto>> info() {
         return super.info(BoardResponseDto.class);
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> show(
         @PathVariable("id") Board entity
@@ -45,9 +45,9 @@ public class BoardController extends ResourcesController<Board> {
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         return super.show(entity, BoardResponseDto.class);
     }
-    
-    @Transactional()
-    @PreAuthorize("hasPermission(#user, 'board_write')")
+
+    @Transactional
+    @PreAuthorize("hasPermission('board', 'write')")
     @PostMapping
     public ResponseEntity<BoardResponseDto> store(
         BoardRequestDto board,
@@ -57,18 +57,19 @@ public class BoardController extends ResourcesController<Board> {
         board.setUser(user);
         return super.store(Board.class, board, BoardResponseDto.class);
     }
-    
+
     @Transactional
-    @IsCurrentEntity
+    // @IsCurrentEntity
+    @PreAuthorize("hasPermission(#board, 'update')")
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> update(
-        @PathVariable("id") Board entity,
+        @PathVariable("id") Board board,
         BoardRequestDto request
     )
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        return super.update(entity, request, BoardResponseDto.class);
+        return super.update(board, request, BoardResponseDto.class);
     }
-    
+
     @Transactional
     @IsCurrentEntity
     @DeleteMapping("/{id}")
@@ -76,12 +77,12 @@ public class BoardController extends ResourcesController<Board> {
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         return super.delete(entity, BoardResponseDto.class);
     }
-    
+
     @Override
     protected BoardService getService() {
         return service;
     }
-    
+
     protected Convertable getConvertable() {
         return convertable;
     }
