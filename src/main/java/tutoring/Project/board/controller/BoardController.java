@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tutoring.Project.auth.entity.User;
-import tutoring.Project.auth.role.IsCurrentEntity;
 import tutoring.Project.base.controller.ResourcesController;
 import tutoring.Project.board.entity.Board;
 import tutoring.Project.board.repository.BoardRepository;
@@ -72,11 +71,11 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     }
 
     @Transactional
-    @IsCurrentEntity
+    @PreAuthorize("hasPermission(#board, 'delete')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board entity)
+    public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board board)
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        return super.delete(entity, BoardResponseDto.class);
+        return super.delete(board, BoardResponseDto.class);
     }
 
     @Override
@@ -84,7 +83,7 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
         return service;
     }
 
-    protected Convertable getConvertable() {
+    protected Convertable getConverter() {
         return convertable;
     }
 }

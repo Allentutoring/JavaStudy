@@ -22,7 +22,7 @@ public abstract class BaseController<Entity extends BaseEntity, Repository exten
         return null;
     }
 
-    protected Convertable getConvertable() {
+    protected Convertable getConverter() {
         return null;
     }
 }

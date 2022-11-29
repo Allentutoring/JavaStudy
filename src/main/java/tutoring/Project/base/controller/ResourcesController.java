@@ -51,7 +51,7 @@ public abstract class ResourcesController<Entity extends BaseEntity, Repository 
     )
         throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Entity entity = newInstance(entityClass);
-        getConvertable().convertDtoToEntity(request, entity);
+        getConverter().convertDtoToEntity(request, entity);
         getService().save(entity);
         return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
@@ -62,7 +62,7 @@ public abstract class ResourcesController<Entity extends BaseEntity, Repository 
         Class<ResponseDto> responseDtoClass
     )
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        getConvertable().convertDtoToEntity(request, entity);
+        getConverter().convertDtoToEntity(request, entity);
         getService().update(entity);
         return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
@@ -98,5 +98,5 @@ public abstract class ResourcesController<Entity extends BaseEntity, Repository 
 
     abstract protected BaseService<Entity, Repository> getService();
 
-    abstract protected Convertable getConvertable();
+    abstract protected Convertable getConverter();
 }
