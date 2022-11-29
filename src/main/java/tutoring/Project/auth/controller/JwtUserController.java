@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tutoring.Project.auth.dto.UserDto;
 import tutoring.Project.auth.entity.User;
+import tutoring.Project.auth.repository.UserRepository;
 import tutoring.Project.auth.role.IsCurrentUser;
 import tutoring.Project.auth.service.UserService;
 import tutoring.Project.base.controller.BaseController;
@@ -20,27 +21,27 @@ import tutoring.Project.base.controller.BaseController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class JwtUserController extends BaseController<User> {
-    
+public class JwtUserController extends BaseController<User, UserRepository> {
+
     private final UserService userService;
-    
+
     @GetMapping
     public ResponseEntity<Optional<User>> info() {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
-    
+
     // @PreAuthorize("isAuthenticated() && #user.id == authentication.principal.id")
     @IsCurrentUser
     @GetMapping("/user/{user}")
     public ResponseEntity<User> show(@PathVariable("user") User user) {
         return ResponseEntity.ok(user);
     }
-    
+
     @PostMapping("/sign/up")
     public ResponseEntity<User> signUp(UserDto userDto) {
         return ResponseEntity.ok(userService.signup(userDto));
     }
-    
+
     @DeleteMapping()
     public void withdraw() {
         userService.withdraw();

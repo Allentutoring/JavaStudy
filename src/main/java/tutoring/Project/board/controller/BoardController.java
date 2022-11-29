@@ -19,6 +19,7 @@ import tutoring.Project.auth.entity.User;
 import tutoring.Project.auth.role.IsCurrentEntity;
 import tutoring.Project.base.controller.ResourcesController;
 import tutoring.Project.board.entity.Board;
+import tutoring.Project.board.repository.BoardRepository;
 import tutoring.Project.board.request.BoardRequestDto;
 import tutoring.Project.board.response.BoardResponseDto;
 import tutoring.Project.board.service.BoardService;
@@ -28,7 +29,7 @@ import tutoring.Project.util.modelmapper.impl.Convertable;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
-public class BoardController extends ResourcesController<Board> {
+public class BoardController extends ResourcesController<Board, BoardRepository> {
 
     private final Convertable convertable;
     private final BoardService service;

@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import tutoring.Project.base.dto.BaseRequestDto;
 import tutoring.Project.base.dto.BaseResponseDto;
 import tutoring.Project.base.entity.BaseEntity;
+import tutoring.Project.base.repository.BaseRepository;
 import tutoring.Project.base.service.BaseService;
-import tutoring.Project.board.repository.BoardRepository;
 import tutoring.Project.util.modelmapper.impl.Convertable;
 
 @Slf4j
 @RestController
-public abstract class ResourcesController<Entity extends BaseEntity> extends
-    BaseController<Entity> {
-    
+public abstract class ResourcesController<Entity extends BaseEntity, Repository extends BaseRepository> extends
+    BaseController<Entity, Repository> {
+
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<List<ResponseDto>> info(
         Class<ResponseDto> responseDtoClass
     ) {
@@ -34,7 +34,7 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
             return response;
         }).collect(Collectors.toList()));
     }
-    
+
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> show(
         @PathVariable("id") Entity entity,
         Class<ResponseDto> responseDtoClass
@@ -43,7 +43,7 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         ResponseDto response = createResponseInstance(responseDtoClass, entity);
         return ResponseEntity.ok(response);
     }
-    
+
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> store(
         Class<Entity> entityClass,
         RequestDto request,
@@ -55,7 +55,7 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         getService().save(entity);
         return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
-    
+
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> update(
         Entity entity,
         RequestDto request,
@@ -66,7 +66,7 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         getService().update(entity);
         return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
-    
+
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> delete(
         Entity entity,
         Class<ResponseDto> responseDtoClass
@@ -75,12 +75,12 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         getService().delete(entity);
         return ResponseEntity.ok(newInstance(responseDtoClass));
     }
-    
+
     private <Instance> Instance newInstance(Class<Instance> cls)
         throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         return cls.getDeclaredConstructor().newInstance();
     }
-    
+
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseDto createResponseInstance(
         Class<ResponseDto> cls,
         Entity entity
@@ -95,8 +95,8 @@ public abstract class ResourcesController<Entity extends BaseEntity> extends
         }
         return dto;
     }
-    
-    abstract protected BaseService<Entity, BoardRepository> getService();
-    
+
+    abstract protected BaseService<Entity, Repository> getService();
+
     abstract protected Convertable getConvertable();
 }
