@@ -2,6 +2,7 @@ package tutoring.javastudy.auth.controller;
 
 import java.util.Optional;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class UserController {
     
     @Transactional
     @PostMapping("/sign/up")
-    public ResponseEntity<User> signUp(UserDto userDto) {
+    public ResponseEntity<User> signUp(@Valid UserDto userDto) {
         return ResponseEntity.ok(userService.signup(userDto));
     }
     
