@@ -1,30 +1,33 @@
 package tutoring.javastudy.exception.handler;
 
 import java.io.IOException;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpHeaders;
+import javax.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import tutoring.javastudy.exception.CustomException;
 
+@Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
     
-    /*@Override
-    public Map<String, Object> getErrorAttributes(
-        WebRequest webRequest, ErrorAttributeOptions options
-    )
-    {
-        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
-        errorAttributes.remove("trace");
-        errorAttributes.remove("errors");
-        return errorAttributes;
+    /*@ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handleException(Exception ex){
+        log.error("handleException",ex);
+        ExceptionResponse response = new ExceptionResponse();
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }*/
+    
+    @ExceptionHandler(Exception.class)
+    public void handleException(HttpServletResponse res, Exception exception) throws IOException
+    {
+        res.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    }
     
     @ExceptionHandler(AccessDeniedException.class)
     public void handleAccessDeniedException(HttpServletResponse res) throws IOException
@@ -32,17 +35,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         res.sendError(HttpStatus.FORBIDDEN.value(), "Access denied");
     }
     
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleExceptions(Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>("Access denied message here", new HttpHeaders(), HttpStatus.FORBIDDEN);
-    }
-    
-    @ExceptionHandler(value
-        = { IllegalArgumentException.class, IllegalStateException.class })
-    protected ResponseEntity<Object> handleConflict(
-        RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "This should be application specific";
-        return handleExceptionInternal(ex, bodyOfResponse,
-                                       new HttpHeaders(), HttpStatus.CONFLICT, request);
+    @ExceptionHandler(BindException.class)
+    public String handleValidationException(HttpServletResponse res) throws IOException
+    {
+        res.sendError(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        return "123";
+        // return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("123");
     }
 }
