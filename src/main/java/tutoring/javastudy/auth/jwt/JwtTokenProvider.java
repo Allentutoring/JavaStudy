@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import tutoring.javastudy.auth.entity.Role;
-import tutoring.javastudy.exception.CustomException;
+import tutoring.javastudy.exception.BaseException;
 
 @Slf4j
 @Component
@@ -78,8 +78,8 @@ public class JwtTokenProvider {
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             log.error(e.getMessage());
-            throw new CustomException("Expired or invalid JWT token",
-                HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BaseException("Expired or invalid JWT token",
+                                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
