@@ -46,7 +46,8 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
      * Route 설정 및 Custom AuthenticationProvider 설정
      * */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
+    {
         http.csrf().disable().httpBasic().disable()
 //            .authorizeRequests()
             // 페이지 권한 설정
@@ -61,14 +62,16 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     }
     
     @Override
-    protected MethodSecurityExpressionHandler createExpressionHandler() {
+    protected MethodSecurityExpressionHandler createExpressionHandler()
+    {
         CustomMethodSecurityExpressionHandler expressionHandler = new CustomMethodSecurityExpressionHandler();
         expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
         return expressionHandler;
     }
     
     @Bean
-    public Key jwtKey() {
+    public Key jwtKey()
+    {
         return new JwtSignKey();
     }
     
@@ -76,7 +79,8 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
      * loadUserByUsername 함수를 이용하여 username(email) 에 해당하는 user 가 있는지 확인 하는 UserDetailService
      * */
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService()
+    {
         return new CustomUserDetailsService(userRepository);
     }
     
@@ -84,17 +88,21 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
      * 전역으로 password 방식 설정
      * */
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder()
+    {
         return new BCryptPasswordEncoder();
     }
     
     @Bean
-    public ModelMapper modelMapper() {
+    public ModelMapper modelMapper()
+    {
         return new ModelMapper();
     }
     
     @Bean
-    public Convertable convertable() {
+    public Convertable convertable()
+    {
         return new Converter(modelMapper());
     }
+    
 }
