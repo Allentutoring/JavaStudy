@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import tutoring.javastudy.auth.entity.Role;
-import tutoring.javastudy.exception.exception.CustomException;
+import tutoring.javastudy.exception.CustomException;
 
 @Slf4j
 @Component

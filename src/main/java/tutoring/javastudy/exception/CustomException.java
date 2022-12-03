@@ -1,4 +1,4 @@
-package tutoring.javastudy.exception.exception;
+package tutoring.javastudy.exception;
 
 import org.springframework.http.HttpStatus;
 
