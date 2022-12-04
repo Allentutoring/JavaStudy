@@ -10,7 +10,6 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
