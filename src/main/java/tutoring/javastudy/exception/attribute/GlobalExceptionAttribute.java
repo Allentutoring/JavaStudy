@@ -14,6 +14,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
+import tutoring.javastudy.exception.BaseException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionAttribute implements ErrorAttributes {
@@ -35,17 +36,23 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
     }
     
     protected void addStatus(
-        Map<String, Object> errorAttributes, RequestAttributes requestAttributes
+        Map<String, Object> errorAttributes, WebRequest webRequest
     )
     {
-        Integer status = getAttribute(requestAttributes, RequestDispatcher.ERROR_STATUS_CODE);
+        Integer status = getAttribute(webRequest, RequestDispatcher.ERROR_STATUS_CODE);
         if (status == null) {
             errorAttributes.put("status", 999);
             errorAttributes.put("error", "None");
             return;
         }
         errorAttributes.put("status", status);
+        
         try {
+            Throwable throwable = getError(webRequest);
+            if (throwable instanceof BaseException) {
+                errorAttributes.put("status", ((BaseException) throwable).getHttpStatus().value());
+            }
+            
             errorAttributes.put("error", HttpStatus.valueOf(status).getReasonPhrase());
         } catch (Exception ex) {
             // Unable to obtain a reason
@@ -92,10 +99,15 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
         if (!ObjectUtils.isEmpty(message)) {
             return message.toString();
         }
-        if (error != null && StringUtils.hasLength(error.getMessage())) {
-            return error.getMessage();
+        if (error != null) {
+            if (StringUtils.hasLength(error.getMessage())) {
+                return error.getMessage();
+            } else if (StringUtils.hasLength(error.getLocalizedMessage())) {
+                return error.getLocalizedMessage();
+            }
         }
         return "No message available";
+        
     }
     
     protected void addPath(Map<String, Object> errorAttributes, RequestAttributes requestAttributes)

@@ -1,24 +1,26 @@
 package tutoring.javastudy.exception;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class BaseException extends RuntimeException {
-
-    private final String message;
-    private final HttpStatus httpStatus;
-
-    public BaseException(String message, HttpStatus httpStatus) {
-        this.message = message;
+    
+    protected String message;
+    protected HttpStatus httpStatus;
+    
+    public BaseException(String message)
+    {
+        super(message);
+    }
+    
+    public BaseException(String message, HttpStatus httpStatus)
+    {
+        this(message);
         this.httpStatus = httpStatus;
     }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
-    }
-
 }
