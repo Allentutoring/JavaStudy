@@ -3,7 +3,6 @@ package tutoring.javastudy.auth.custom.config;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -32,7 +31,6 @@ import tutoring.javastudy.auth.jwt.JwtTokenProvider;
 import tutoring.javastudy.auth.repository.UserRepository;
 import tutoring.javastudy.base.permission.CustomMethodSecurityExpressionHandler;
 import tutoring.javastudy.base.permission.CustomPermissionEvaluator;
-import tutoring.javastudy.base.permission.impl.Policy;
 import tutoring.javastudy.util.modelmapper.Converter;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
 
@@ -45,7 +43,6 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     
-    private final Map<Class<?>, Policy> policies;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
@@ -77,7 +74,7 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     {
         CustomMethodSecurityExpressionHandler expressionHandler = new CustomMethodSecurityExpressionHandler();
         expressionHandler.setApplicationContext(applicationContext);
-        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator(policies));
+        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
         return expressionHandler;
     }
     

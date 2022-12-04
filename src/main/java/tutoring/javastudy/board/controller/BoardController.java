@@ -49,7 +49,7 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     }
     
     @Transactional
-    @PreAuthorize("hasPermission('board', 'write') and @boardPolicy.store()")
+    @PreAuthorize("hasPermission('board', 'store') and @boardPolicy.store()")
     @PostMapping
     public ResponseEntity<BoardResponseDto> store(
         BoardRequestDto board, @AuthenticationPrincipal User user
@@ -62,10 +62,10 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     
     @Transactional
     // @IsCurrentEntity
-    @PreAuthorize("hasPermission(#board, 'update')")
+    @PreAuthorize("hasPermission('board', 'update') and @boardPolicy.update(#user, #board)")
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> update(
-        @PathVariable("id") Board board, BoardRequestDto request
+        @AuthenticationPrincipal User user, @PathVariable("id") Board board, BoardRequestDto request
     )
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
@@ -73,7 +73,7 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     }
     
     @Transactional
-    @PreAuthorize("hasPermission(#board, 'delete')")
+    @PreAuthorize("hasPermission('board', 'delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board board)
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
