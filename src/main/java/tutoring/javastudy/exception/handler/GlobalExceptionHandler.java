@@ -10,6 +10,7 @@ import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,9 +29,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler
     
     @ExceptionHandler(Exception.class)
     public void handleException(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        Exception exception
+        HttpServletRequest request, HttpServletResponse response, Exception exception
     )
     throws IOException
     {
@@ -52,9 +51,20 @@ public class GlobalExceptionHandler extends BaseExceptionHandler
     )
     throws IOException
     {
-        response.sendError(HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                           Objects.requireNonNull(exception.getBindingResult().getFieldError())
-                                  .getDefaultMessage()
+        response.sendError(
+            HttpStatus.UNPROCESSABLE_ENTITY.value(),
+            Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage()
         );
+    }
+    
+    @ExceptionHandler(value = MissingPathVariableException.class)
+    public void handleNotFoundException(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        MissingPathVariableException exception
+    )
+    throws IOException
+    {
+        response.sendError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
     }
 }
