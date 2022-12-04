@@ -28,8 +28,8 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/board/{board}")
-public class CommentController extends ResourcesController<Comment, CommentRepository> {
+@RequestMapping("/api/board/{board}/comment/{comment}")
+public class SubCommentController extends ResourcesController<Comment, CommentRepository> {
     
     private final Convertable converter;
     private final CommentService service;
@@ -40,7 +40,7 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
         return super.info(CommentResponseDto.class);
     }
     
-    @GetMapping("/comment/{id}")
+    @GetMapping("/sub/{id}")
     public ResponseEntity<CommentResponseDto> show(@PathVariable("id") Comment entity)
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
@@ -49,7 +49,7 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
     
     @Transactional
     @PreAuthorize("hasPermission(#board, 'comment_write')")
-    @PostMapping("/comment")
+    @PostMapping("/sub")
     public ResponseEntity<CommentResponseDto> store(
         CommentRequestDto request,
         @PathVariable("board") Board board,
@@ -66,7 +66,7 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
     
     @Transactional
     @PreAuthorize("hasPermission(#comment, 'update')")
-    @PutMapping("/comment/{id}")
+    @PutMapping("/sub/{id}")
     public ResponseEntity<CommentResponseDto> update(
         @PathVariable("id") Comment comment, CommentRequestDto request
     )
@@ -77,7 +77,7 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
     
     @Transactional
     @PreAuthorize("hasPermission(#comment, 'delete')")
-    @DeleteMapping("/comment/{id}")
+    @DeleteMapping("/sub/{id}")
     public ResponseEntity<CommentResponseDto> delete(@PathVariable("id") Comment comment)
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
