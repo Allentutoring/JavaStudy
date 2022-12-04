@@ -2,16 +2,15 @@ package tutoring.javastudy.auth.custom.config;
 
 import java.security.Key;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.error.ErrorAttributeOptions.Include;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -31,8 +30,9 @@ import tutoring.javastudy.auth.jwt.JwtSignKey;
 import tutoring.javastudy.auth.jwt.JwtTokenFilter;
 import tutoring.javastudy.auth.jwt.JwtTokenProvider;
 import tutoring.javastudy.auth.repository.UserRepository;
-import tutoring.javastudy.base.evalutator.CustomMethodSecurityExpressionHandler;
-import tutoring.javastudy.base.evalutator.CustomPermissionEvaluator;
+import tutoring.javastudy.base.permission.CustomMethodSecurityExpressionHandler;
+import tutoring.javastudy.base.permission.CustomPermissionEvaluator;
+import tutoring.javastudy.base.permission.impl.Policy;
 import tutoring.javastudy.util.modelmapper.Converter;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
 
@@ -45,15 +45,19 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     
+    private final Map<Class<?>, Policy> policies;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
+    
+    private final ApplicationContext applicationContext;
     
     /*
      * Route 설정 및 Custom AuthenticationProvider 설정
      * */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
+    public SecurityFilterChain filterChain(HttpSecurity http)
+    throws Exception
     {
         http.csrf().disable().httpBasic().disable()
 //            .authorizeRequests()
@@ -72,7 +76,8 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     protected MethodSecurityExpressionHandler createExpressionHandler()
     {
         CustomMethodSecurityExpressionHandler expressionHandler = new CustomMethodSecurityExpressionHandler();
-        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
+        expressionHandler.setApplicationContext(applicationContext);
+        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator(policies));
         return expressionHandler;
     }
     
@@ -111,9 +116,10 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     {
         return new Converter(modelMapper());
     }
-
+    
     @Bean
-    public ErrorAttributeOptions errorAttributeOptions() {
+    public ErrorAttributeOptions errorAttributeOptions()
+    {
         List<Include> includes = new ArrayList<>();
         includes.add(Include.EXCEPTION);
         includes.add(Include.BINDING_ERRORS);

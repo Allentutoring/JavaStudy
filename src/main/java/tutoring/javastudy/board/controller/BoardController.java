@@ -29,61 +29,66 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
 public class BoardController extends ResourcesController<Board, BoardRepository> {
-
+    
     private final Convertable convertable;
     private final BoardService service;
-
+    
     @GetMapping
-    public ResponseEntity<List<BoardResponseDto>> info() {
+    public ResponseEntity<List<BoardResponseDto>> info()
+    {
         return super.info(BoardResponseDto.class);
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> show(
         @PathVariable("id") Board entity
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.show(entity, BoardResponseDto.class);
     }
-
+    
     @Transactional
-    @PreAuthorize("hasPermission('board', 'write')")
+    @PreAuthorize("hasPermission('board', 'write') and @boardPolicy.store()")
     @PostMapping
     public ResponseEntity<BoardResponseDto> store(
-        BoardRequestDto board,
-        @AuthenticationPrincipal User user
+        BoardRequestDto board, @AuthenticationPrincipal User user
     )
-        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    {
         board.setUser(user);
         return super.store(Board.class, board, BoardResponseDto.class);
     }
-
+    
     @Transactional
     // @IsCurrentEntity
     @PreAuthorize("hasPermission(#board, 'update')")
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> update(
-        @PathVariable("id") Board board,
-        BoardRequestDto request
+        @PathVariable("id") Board board, BoardRequestDto request
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.update(board, request, BoardResponseDto.class);
     }
-
+    
     @Transactional
     @PreAuthorize("hasPermission(#board, 'delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board board)
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.delete(board, BoardResponseDto.class);
     }
-
+    
     @Override
-    protected BoardService getService() {
+    protected BoardService getService()
+    {
         return service;
     }
-
-    protected Convertable getConverter() {
+    
+    protected Convertable getConverter()
+    {
         return convertable;
     }
 }
