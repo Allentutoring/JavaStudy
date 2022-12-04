@@ -12,6 +12,12 @@ public class BoardResponseDto extends BaseResponseDto<Board> {
     protected String content;
     protected String createdAt;
     
+    protected UserResponseDto user;
+    
+    public BoardResponseDto(Board entity)
+    {
+        super(entity);
+    }
     
     public void bindEntity(Board entity)
     {
@@ -19,5 +25,6 @@ public class BoardResponseDto extends BaseResponseDto<Board> {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.createdAt = this.dateTimeUtil.getDateTime(entity.getCreatedAt());
+        this.user = new UserResponseDto(entity.getUser());
     }
 }
