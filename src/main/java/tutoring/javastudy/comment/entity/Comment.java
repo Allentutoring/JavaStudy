@@ -1,8 +1,10 @@
 package tutoring.javastudy.comment.entity;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,15 +20,19 @@ import tutoring.javastudy.board.entity.Board;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends BaseEntity {
-
+    
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
-
+    
     @NotNull
     @ManyToOne()
     private Board board;
-
+    
     @NotNull
     @ManyToOne()
     private User user;
+    
+    @NotNull
+    @OneToMany()
+    private List<Comment> comments;
 }

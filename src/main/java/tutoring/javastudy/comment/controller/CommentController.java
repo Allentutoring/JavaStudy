@@ -2,6 +2,7 @@ package tutoring.javastudy.comment.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,30 +29,33 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/board/{board}")
+@RequestMapping("/api/board/{board}/comment")
 public class CommentController extends ResourcesController<Comment, CommentRepository> {
     
     private final Convertable converter;
     private final CommentService service;
     
-    @GetMapping("/comment/{comment}")
-    public ResponseEntity<List<CommentResponseDto>> info()
+    @GetMapping()
+    @PreAuthorize("@commentPolicy.index(#user, #board)")
+    public ResponseEntity<List<CommentResponseDto>> index(
+        @AuthenticationPrincipal User user, @PathVariable("board") Board board
+    )
     {
-        return super.info(CommentResponseDto.class);
+        return super.index(CommentResponseDto.class);
     }
     
-    @GetMapping("/comment/{id}")
-    public ResponseEntity<CommentResponseDto> show(@PathVariable("id") Comment entity)
+    @GetMapping("/{comment}")
+    public ResponseEntity<CommentResponseDto> show(@PathVariable("comment") Comment entity)
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         return super.show(entity, CommentResponseDto.class);
     }
     
     @Transactional
-    @PreAuthorize("hasPermission(#board, 'comment_write')")
-    @PostMapping("/comment")
+    @PreAuthorize("hasPermission('comment', 'store') and @commentPolicy.store(#user, #board)")
+    @PostMapping()
     public ResponseEntity<CommentResponseDto> store(
-        CommentRequestDto request,
+        @Valid CommentRequestDto request,
         @PathVariable("board") Board board,
         @AuthenticationPrincipal User user
     )
@@ -59,16 +63,17 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
     {
         request.setBoard(board);
         request.setUser(user);
-//        Comment comment = this.converter.convertDtoToEntity(request, Comment.class);
-//        this.service.save(comment);
         return super.store(Comment.class, request, CommentResponseDto.class);
     }
     
     @Transactional
-    @PreAuthorize("hasPermission(#comment, 'update')")
-    @PutMapping("/comment/{id}")
+    @PreAuthorize("hasPermission('comment', 'update') and @commentPolicy.update(#user, #board, #comment)")
+    @PutMapping("/{comment}")
     public ResponseEntity<CommentResponseDto> update(
-        @PathVariable("id") Comment comment, CommentRequestDto request
+        @AuthenticationPrincipal User user,
+        @PathVariable("board") Board board,
+        @PathVariable("comment") Comment comment,
+        @Valid CommentRequestDto request
     )
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
@@ -76,9 +81,13 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
     }
     
     @Transactional
-    @PreAuthorize("hasPermission(#comment, 'delete')")
-    @DeleteMapping("/comment/{id}")
-    public ResponseEntity<CommentResponseDto> delete(@PathVariable("id") Comment comment)
+    @PreAuthorize("hasPermission('comment', 'delete') and @commentPolicy.delete(#user, #board, #comment)")
+    @DeleteMapping("/{comment}")
+    public ResponseEntity<CommentResponseDto> delete(
+        @AuthenticationPrincipal User user,
+        @PathVariable("board") Board board,
+        @PathVariable("comment") Comment comment
+    )
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         return super.delete(comment, CommentResponseDto.class);

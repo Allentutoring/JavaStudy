@@ -16,12 +16,13 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 
 @Slf4j
 @RestController
-public abstract class ResourcesController<Entity extends BaseEntity, Repository extends BaseRepository> extends
-    BaseController<Entity, Repository> {
-
-    public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<List<ResponseDto>> info(
+public abstract class ResourcesController<Entity extends BaseEntity, Repository extends BaseRepository>
+    extends BaseController<Entity, Repository> {
+    
+    public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<List<ResponseDto>> index(
         Class<ResponseDto> responseDtoClass
-    ) {
+    )
+    {
         return ResponseEntity.ok(getService().index().stream().map(e -> {
             ResponseDto response;
             try {
@@ -34,58 +35,57 @@ public abstract class ResourcesController<Entity extends BaseEntity, Repository 
             return response;
         }).collect(Collectors.toList()));
     }
-
+    
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> show(
-        @PathVariable("id") Entity entity,
-        Class<ResponseDto> responseDtoClass
+        @PathVariable("id") Entity entity, Class<ResponseDto> responseDtoClass
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         ResponseDto response = createResponseInstance(responseDtoClass, entity);
         return ResponseEntity.ok(response);
     }
-
+    
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> store(
-        Class<Entity> entityClass,
-        RequestDto request,
-        Class<ResponseDto> responseDtoClass
+        Class<Entity> entityClass, RequestDto request, Class<ResponseDto> responseDtoClass
     )
-        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    {
         Entity entity = newInstance(entityClass);
         getConverter().convertDtoToEntity(request, entity);
         getService().save(entity);
         return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
-
+    
     public <RequestDto extends BaseRequestDto, ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> update(
-        Entity entity,
-        RequestDto request,
-        Class<ResponseDto> responseDtoClass
+        Entity entity, RequestDto request, Class<ResponseDto> responseDtoClass
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         getConverter().convertDtoToEntity(request, entity);
         getService().update(entity);
         return ResponseEntity.ok(createResponseInstance(responseDtoClass, entity));
     }
-
+    
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> delete(
-        Entity entity,
-        Class<ResponseDto> responseDtoClass
+        Entity entity, Class<ResponseDto> responseDtoClass
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         getService().delete(entity);
         return ResponseEntity.ok(newInstance(responseDtoClass));
     }
-
+    
     private <Instance> Instance newInstance(Class<Instance> cls)
-        throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+    {
         return cls.getDeclaredConstructor().newInstance();
     }
-
+    
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseDto createResponseInstance(
-        Class<ResponseDto> cls,
-        Entity entity
+        Class<ResponseDto> cls, Entity entity
     )
-        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    {
         ResponseDto dto;
         try {
             dto = cls.getDeclaredConstructor(entity.getClass()).newInstance(entity);
@@ -95,8 +95,8 @@ public abstract class ResourcesController<Entity extends BaseEntity, Repository 
         }
         return dto;
     }
-
+    
     abstract protected BaseService<Entity, Repository> getService();
-
+    
     abstract protected Convertable getConverter();
 }

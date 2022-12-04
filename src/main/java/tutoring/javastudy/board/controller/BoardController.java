@@ -34,9 +34,9 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     private final BoardService service;
     
     @GetMapping
-    public ResponseEntity<List<BoardResponseDto>> info()
+    public ResponseEntity<List<BoardResponseDto>> index()
     {
-        return super.info(BoardResponseDto.class);
+        return super.index(BoardResponseDto.class);
     }
     
     @GetMapping("/{id}")
