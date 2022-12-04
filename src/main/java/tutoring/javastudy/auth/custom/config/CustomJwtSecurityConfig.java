@@ -1,10 +1,17 @@
 package tutoring.javastudy.auth.custom.config;
 
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
+import org.springframework.boot.web.error.ErrorAttributeOptions.Include;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -104,5 +111,13 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     {
         return new Converter(modelMapper());
     }
-    
+
+    @Bean
+    public ErrorAttributeOptions errorAttributeOptions() {
+        List<Include> includes = new ArrayList<>();
+        includes.add(Include.EXCEPTION);
+        includes.add(Include.BINDING_ERRORS);
+        includes.add(Include.MESSAGE);
+        return ErrorAttributeOptions.of(includes);
+    }
 }

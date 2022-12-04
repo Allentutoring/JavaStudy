@@ -1,16 +1,15 @@
 package tutoring.javastudy.exception.handler;
 
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +18,15 @@ import tutoring.javastudy.exception.BaseException;
 import tutoring.javastudy.exception.response.ExceptionResponse;
 
 @Slf4j
-@Order(1)
 @RestControllerAdvice(annotations = RestController.class)
-public class GlobalExceptionHandler
+public class GlobalExceptionHandler extends BaseExceptionHandler
     //extends ResponseEntityExceptionHandler
 {
+    
+    public GlobalExceptionHandler(ErrorAttributes errorAttributes, ErrorAttributeOptions options)
+    {
+        super(errorAttributes, options);
+    }
     
     /*@ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception ex){
@@ -32,11 +35,9 @@ public class GlobalExceptionHandler
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }*/
     
-    @ExceptionHandler(BaseException.class)
+    @ExceptionHandler(value = BaseException.class)
     public ResponseEntity<ExceptionResponse> handleException(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        BaseException exception
+        HttpServletRequest request, HttpServletResponse response, BaseException exception
     )
     {
         return ResponseEntity.status(exception.getHttpStatus())
@@ -46,15 +47,19 @@ public class GlobalExceptionHandler
                                                     .build());
     }
     
-    @ExceptionHandler(BindException.class)
-    public Map<String, String> handleValidationException(HttpServletResponse res, BindException exception)
-        throws IOException
+    @ExceptionHandler(value = BindException.class)
+    public ResponseEntity<ExceptionResponse> handleValidationException(
+        HttpServletRequest request, HttpServletResponse response, BindException exception
+    )
     {
-        res.sendError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "validation");
-        Map<String, String> errorAttributes = new HashMap<>();
-        errorAttributes.put("code", "BOARD_NOT_FOUND");
-        errorAttributes.put("message", exception.getMessage());
-        return errorAttributes;
+        Map<String, Object> attributes = this.getErrorAttributes(request, options);
+        return this.response(ExceptionResponse.builder()
+                                              .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                                              .path((String) attributes.get("path"))
+                                              .message(Objects.requireNonNull(exception.getBindingResult()
+                                                                                       .getFieldError())
+                                                              .getDefaultMessage())
+                                              .build());
     }
     
     /*@ExceptionHandler(value
