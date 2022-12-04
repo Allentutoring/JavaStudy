@@ -73,9 +73,11 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     }
     
     @Transactional
-    @PreAuthorize("hasPermission('board', 'delete')")
+    @PreAuthorize("hasPermission('board', 'delete') and @boardPolicy.delete(#user, #board)")
     @DeleteMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> delete(@PathVariable("id") Board board)
+    public ResponseEntity<BoardResponseDto> delete(
+        @AuthenticationPrincipal User user, @PathVariable("id") Board board
+    )
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         return super.delete(board, BoardResponseDto.class);

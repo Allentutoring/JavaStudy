@@ -17,4 +17,9 @@ public class BoardPolicy implements Policy {
     {
         return board.getUser().getId().equals(user.getId());
     }
+    
+    public boolean delete(User user, Board board)
+    {
+        return board.getUser().getId().equals(user.getId());
+    }
 }
