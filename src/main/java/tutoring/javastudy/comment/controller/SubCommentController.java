@@ -23,7 +23,7 @@ import tutoring.javastudy.comment.entity.Comment;
 import tutoring.javastudy.comment.repository.CommentRepository;
 import tutoring.javastudy.comment.request.SubCommentRequestDto;
 import tutoring.javastudy.comment.response.SubCommentResponseDto;
-import tutoring.javastudy.comment.service.CommentService;
+import tutoring.javastudy.comment.service.SubCommentService;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
 
 @Slf4j
@@ -33,7 +33,7 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 public class SubCommentController extends ResourcesController<Comment, CommentRepository> {
 
     private final Convertable converter;
-    private final CommentService service;
+    private final SubCommentService service;
 
     @GetMapping()
     @PreAuthorize("@subCommentPolicy.index(#user, #board, #comment)")
@@ -41,7 +41,9 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
         @AuthenticationPrincipal User user, @PathVariable("board") Board board,
         @PathVariable("comment") Comment comment
     ) {
-        return super.index(SubCommentResponseDto.class);
+        List<SubCommentResponseDto> result = this.service.index(comment).stream()
+            .map(SubCommentResponseDto::new).toList();
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{subComment}")
@@ -62,6 +64,7 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
         throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         request.setBoard(board);
         request.setUser(user);
+        request.setParent(comment);
         return super.store(Comment.class, request, SubCommentResponseDto.class);
     }
 
@@ -93,7 +96,7 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
     }
 
     @Override
-    protected CommentService getService() {
+    protected SubCommentService getService() {
         return service;
     }
 

@@ -15,5 +15,5 @@ public class SubCommentRequestDto extends BaseRequestDto {
     private String content;
     private User user;
     private Board board;
-    private Comment comment;
+    private Comment parent;
 }
