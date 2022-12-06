@@ -1,5 +1,6 @@
 package tutoring.javastudy.comment.request;
 
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.ToString;
 import tutoring.javastudy.auth.entity.User;
@@ -11,7 +12,7 @@ import tutoring.javastudy.comment.entity.Comment;
 @Data
 public class SubCommentRequestDto extends BaseRequestDto {
 
-    private String title;
+    @NotBlank
     private String content;
     private User user;
     private Board board;
