@@ -1,10 +1,10 @@
 package tutoring.javastudy.comment.controller;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +22,7 @@ import tutoring.javastudy.board.entity.Board;
 import tutoring.javastudy.comment.entity.Comment;
 import tutoring.javastudy.comment.repository.CommentRepository;
 import tutoring.javastudy.comment.request.CommentRequestDto;
+import tutoring.javastudy.comment.response.CommentPageResponseDto;
 import tutoring.javastudy.comment.response.CommentResponseDto;
 import tutoring.javastudy.comment.service.CommentService;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
@@ -37,11 +38,12 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
     
     @GetMapping()
     @PreAuthorize("@commentPolicy.index(#user, #board)")
-    public ResponseEntity<List<CommentResponseDto>> index(
-        @AuthenticationPrincipal User user, @PathVariable("board") Board board
+    public ResponseEntity<CommentPageResponseDto> index(
+        @AuthenticationPrincipal User user, @PathVariable("board") Board board, Pageable pageable
     )
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
-        return super.index(CommentResponseDto.class);
+        return super.index(CommentPageResponseDto.class, pageable);
     }
     
     @GetMapping("/{comment}")

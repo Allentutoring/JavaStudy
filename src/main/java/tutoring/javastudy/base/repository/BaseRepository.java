@@ -23,4 +23,5 @@ public interface BaseRepository<Entity extends BaseEntity, Var> extends JpaRepos
      * @return a page of entities
      */
     Page<Entity> findAll(Pageable pageable);
+    
 }

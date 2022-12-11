@@ -11,7 +11,7 @@ import tutoring.javastudy.base.repository.BaseRepository;
 @RequiredArgsConstructor
 public class BaseService<Entity extends BaseEntity, Repository extends BaseRepository> {
     
-    private final Repository repository;
+    protected final Repository repository;
     
     public List<Entity> index()
     {

@@ -12,4 +12,5 @@ public class BoardService extends BaseService<Board, BoardRepository> {
     {
         super(repository);
     }
+    
 }

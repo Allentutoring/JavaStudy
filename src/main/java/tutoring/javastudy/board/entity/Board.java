@@ -1,5 +1,6 @@
 package tutoring.javastudy.board.entity;
 
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 import tutoring.javastudy.auth.entity.User;
 import tutoring.javastudy.base.entity.BaseEntity;
 import tutoring.javastudy.comment.entity.Comment;
@@ -35,6 +37,7 @@ public class Board extends BaseEntity {
     @ManyToOne()
     private User user;
     
+    @BatchSize(size = 10)
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    private List<Comment> comments = new LinkedList<>();
 }
