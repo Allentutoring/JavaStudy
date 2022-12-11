@@ -3,6 +3,8 @@ package tutoring.javastudy.base.service;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import tutoring.javastudy.base.entity.BaseEntity;
 import tutoring.javastudy.base.repository.BaseRepository;
 
@@ -14,6 +16,11 @@ public class BaseService<Entity extends BaseEntity, Repository extends BaseRepos
     public List<Entity> index()
     {
         return repository.findAll();
+    }
+    
+    public Page<Entity> index(Pageable pageable)
+    {
+        return repository.findAll(pageable);
     }
     
     public Optional<Entity> show(Object id)

@@ -1,4 +1,4 @@
-package tutoring.javastudy.base.dto;
+package tutoring.javastudy.base.request;
 
 import lombok.Getter;
 

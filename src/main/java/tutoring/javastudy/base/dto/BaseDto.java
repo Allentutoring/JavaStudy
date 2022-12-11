@@ -1,11 +1,12 @@
 package tutoring.javastudy.base.dto;
 
 import lombok.NoArgsConstructor;
-import tutoring.javastudy.base.entity.BaseEntity;
+import lombok.experimental.SuperBuilder;
 import tutoring.javastudy.util.DateTimeFormatter;
 
+@SuperBuilder
 @NoArgsConstructor
-public class BaseResponseDto<Entity extends BaseEntity> {
+public class BaseDto {
     
     protected DateTimeFormatter dateTimeUtil;
     
@@ -13,12 +14,4 @@ public class BaseResponseDto<Entity extends BaseEntity> {
         this.dateTimeUtil = new DateTimeFormatter();
     }
     
-    public BaseResponseDto(Entity entity)
-    {
-        this.bindEntity(entity);
-    }
-    
-    public void bindEntity(Entity entity)
-    {
-    }
 }
