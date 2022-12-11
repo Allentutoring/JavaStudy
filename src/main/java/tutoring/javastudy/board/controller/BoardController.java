@@ -1,9 +1,9 @@
 package tutoring.javastudy.board.controller;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +20,7 @@ import tutoring.javastudy.base.controller.ResourcesController;
 import tutoring.javastudy.board.entity.Board;
 import tutoring.javastudy.board.repository.BoardRepository;
 import tutoring.javastudy.board.request.BoardRequestDto;
+import tutoring.javastudy.board.response.BoardPageResponseDto;
 import tutoring.javastudy.board.response.BoardResponseDto;
 import tutoring.javastudy.board.service.BoardService;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
@@ -34,10 +35,17 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     private final BoardService service;
     
     @GetMapping
+    public ResponseEntity<BoardPageResponseDto> index(Pageable pageable)
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
+        return super.index(BoardPageResponseDto.class, pageable);
+    }
+    
+    /*@GetMapping
     public ResponseEntity<List<BoardResponseDto>> index()
     {
         return super.index(BoardResponseDto.class);
-    }
+    }*/
     
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> show(
@@ -61,7 +69,6 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     }
     
     @Transactional
-    // @IsCurrentEntity
     @PreAuthorize("hasPermission('board', 'update') and @boardPolicy.update(#user, #board)")
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> update(

@@ -3,7 +3,7 @@ package tutoring.javastudy.board.request;
 import lombok.Data;
 import lombok.ToString;
 import tutoring.javastudy.auth.entity.User;
-import tutoring.javastudy.base.dto.BaseRequestDto;
+import tutoring.javastudy.base.request.BaseRequestDto;
 
 @ToString
 @Data

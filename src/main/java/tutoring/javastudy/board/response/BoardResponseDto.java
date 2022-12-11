@@ -2,7 +2,7 @@ package tutoring.javastudy.board.response;
 
 import java.util.List;
 import lombok.Data;
-import tutoring.javastudy.base.dto.BaseResponseDto;
+import tutoring.javastudy.base.response.BaseResponseDto;
 import tutoring.javastudy.board.entity.Board;
 
 @Data
@@ -14,6 +14,11 @@ public class BoardResponseDto extends BaseResponseDto<Board> {
     protected String createdAt;
     
     protected List<CommentResponseDto> comments;
+    
+    public BoardResponseDto(Board board)
+    {
+        super(board);
+    }
     
     @Override
     public void bindEntity(Board entity)

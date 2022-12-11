@@ -1,7 +1,7 @@
 package tutoring.javastudy.comment.response;
 
 import lombok.Data;
-import tutoring.javastudy.base.dto.BaseResponseDto;
+import tutoring.javastudy.base.response.BaseResponseDto;
 import tutoring.javastudy.board.entity.Board;
 
 @Data
