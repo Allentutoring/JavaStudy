@@ -20,6 +20,7 @@ import tutoring.javastudy.base.controller.ResourcesController;
 import tutoring.javastudy.board.entity.Board;
 import tutoring.javastudy.board.repository.BoardRepository;
 import tutoring.javastudy.board.request.BoardRequestDto;
+import tutoring.javastudy.board.response.BoardDetailResponseDto;
 import tutoring.javastudy.board.response.BoardPageResponseDto;
 import tutoring.javastudy.board.response.BoardResponseDto;
 import tutoring.javastudy.board.service.BoardService;
@@ -48,12 +49,12 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     }*/
     
     @GetMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> show(
+    public ResponseEntity<BoardDetailResponseDto> show(
         @PathVariable("id") Board entity
     )
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
-        return super.show(entity, BoardResponseDto.class);
+        return super.show(entity, BoardDetailResponseDto.class);
     }
     
     @Transactional
