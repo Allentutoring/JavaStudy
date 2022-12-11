@@ -8,20 +8,24 @@ import tutoring.javastudy.comment.entity.Comment;
 
 @Service("subCommentPolicy")
 public class SubCommentPolicy implements Policy {
-
-    public boolean index(User user, Board board, Comment comment) {
+    
+    public boolean index(User user, Board board, Comment comment)
+    {
         return true;
     }
-
-    public boolean store(User user, Board board, Comment comment) {
+    
+    public boolean store(User user, Board board, Comment comment)
+    {
         return true;
     }
-
-    public boolean update(User user, Board board, Comment comment, Comment subComment) {
+    
+    public boolean update(User user, Board board, Comment comment, Comment subComment)
+    {
         return comment.getUser().getId().equals(user.getId());
     }
-
-    public boolean delete(User user, Board board, Comment comment, Comment subComment) {
+    
+    public boolean delete(User user, Board board, Comment comment, Comment subComment)
+    {
         return comment.getUser().getId().equals(user.getId());
     }
 }

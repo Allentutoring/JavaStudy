@@ -19,17 +19,12 @@ import tutoring.javastudy.base.entity.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role extends BaseEntity {
-
+    
     @Column(length = 36, unique = true)
     private String name;
-
+    
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "roles_privileges",
-        joinColumns = @JoinColumn(
-            name = "role_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(
-            name = "privilege_id", referencedColumnName = "id"))
+    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges;
-
+    
 }

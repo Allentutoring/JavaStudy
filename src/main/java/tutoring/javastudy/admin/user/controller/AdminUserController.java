@@ -15,13 +15,14 @@ import tutoring.javastudy.auth.repository.UserRepository;
 @RequestMapping("/admin/user")
 @AllArgsConstructor
 public class AdminUserController extends AdminController {
-
+    
     private final UserRepository repository;
-
+    
     @IsAdmin
     @GetMapping("/all")
-    public ResponseEntity<List<User>> allInfo() {
+    public ResponseEntity<List<User>> allInfo()
+    {
         return ResponseEntity.ok(repository.findAll());
     }
-
+    
 }

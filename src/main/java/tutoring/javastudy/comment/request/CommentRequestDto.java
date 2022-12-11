@@ -10,7 +10,7 @@ import tutoring.javastudy.board.entity.Board;
 @ToString
 @Data
 public class CommentRequestDto extends BaseRequestDto {
-
+    
     @NotBlank
     private String content;
     private User user;

@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Please Sign Up</title>
+  <title>Please Sign Up</title>
 </head>
 <body>
 <h1>Please Sign Up</h1>
 <form method="post" th:action="@{/api/signup}">
-    <div>
-        <input name="email" placeholder="Email" type="text"/>
-    </div>
-    <div>
-        <input name="nickname" placeholder="Nickname" type="text"/>
-    </div>
-    <div>
-        <input name="password" placeholder="Password" type="password"/>
-    </div>
-    <input type="submit" value="Sign Up"/>
+  <div>
+    <input name="email" placeholder="Email" type="text"/>
+  </div>
+  <div>
+    <input name="nickname" placeholder="Nickname" type="text"/>
+  </div>
+  <div>
+    <input name="password" placeholder="Password" type="password"/>
+  </div>
+  <input type="submit" value="Sign Up"/>
 </form>
 </body>
 </html>

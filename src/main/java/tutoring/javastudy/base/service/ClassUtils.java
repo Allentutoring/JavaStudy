@@ -6,9 +6,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class ClassUtils<T> {
+    
     private static final String TYPE_NAME_PREFIX = "class ";
-
-    public static Class<?> getReclusiveGenericClass(Class<?> clazz, int index) {
+    
+    public static Class<?> getReclusiveGenericClass(Class<?> clazz, int index)
+    {
         Class<?> targetClass = clazz;
         while (targetClass != null) {
             Class<?> genericClass = getGenericClass(targetClass, index);
@@ -19,9 +21,10 @@ public class ClassUtils<T> {
         }
         return null;
     }
-
-    public static Class<?> getGenericClass(Class<?> clazz, int index) {
-        Type types[] = getParameterizedTypes(clazz);
+    
+    public static Class<?> getGenericClass(Class<?> clazz, int index)
+    {
+        Type[] types = getParameterizedTypes(clazz);
         if ((types != null) && (types.length > index)) {
             try {
                 return getClass(types[index]);
@@ -31,16 +34,19 @@ public class ClassUtils<T> {
         }
         return null;
     }
-
-    static public Type[] getParameterizedTypes(Class<?> target) {
+    
+    static public Type[] getParameterizedTypes(Class<?> target)
+    {
         Type[] types = getGenericType(target);
         if (types.length > 0 && types[0] instanceof ParameterizedType) {
             return ((ParameterizedType) types[0]).getActualTypeArguments();
         }
         return null;
     }
-
-    static public Class<?> getClass(Type type) throws ClassNotFoundException {
+    
+    static public Class<?> getClass(Type type)
+    throws ClassNotFoundException
+    {
         if (type instanceof Class) {
             return (Class) type;
         } else if (type instanceof ParameterizedType) {
@@ -58,8 +64,9 @@ public class ClassUtils<T> {
         }
         return Class.forName(className);
     }
-
-    static public String getClassName(Type type) {
+    
+    static public String getClassName(Type type)
+    {
         if (type == null) {
             return "";
         }
@@ -69,8 +76,9 @@ public class ClassUtils<T> {
         }
         return className;
     }
-
-    static public Type[] getGenericType(Class<?> target) {
+    
+    static public Type[] getGenericType(Class<?> target)
+    {
         if (target == null) {
             return new Type[0];
         }

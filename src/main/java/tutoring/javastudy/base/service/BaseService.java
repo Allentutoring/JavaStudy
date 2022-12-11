@@ -8,27 +8,32 @@ import tutoring.javastudy.base.repository.BaseRepository;
 
 @RequiredArgsConstructor
 public class BaseService<Entity extends BaseEntity, Repository extends BaseRepository> {
-
+    
     private final Repository repository;
-
-    public List<Entity> index() {
+    
+    public List<Entity> index()
+    {
         return repository.findAll();
     }
-
-    public Optional<Entity> show(Object id) {
+    
+    public Optional<Entity> show(Object id)
+    {
         return repository.findById(id);
     }
-
-    public Object save(Entity entity) {
+    
+    public Object save(Entity entity)
+    {
         return repository.save(entity);
     }
-
-    public Object update(Entity entity) {
+    
+    public Object update(Entity entity)
+    {
         return repository.save(entity);
     }
-
-    public void delete(Entity entity) {
+    
+    public void delete(Entity entity)
+    {
         repository.delete(entity);
     }
-
+    
 }

@@ -24,7 +24,8 @@ public class UserService {
     
     
     @Transactional
-    public User signup(UserDto dto) {
+    public User signup(UserDto dto)
+    {
         
         if (userRepository.findByEmail(dto.getEmail()).orElse(null) != null) {
             throw new RuntimeException("이미 등록되어 있는 유저입니다.");
@@ -43,25 +44,29 @@ public class UserService {
     }
     
     @Transactional
-    public User findById(Long id) {
+    public User findById(Long id)
+    {
         Optional<User> user = userRepository.findById(id);
         return user.get();
     }
     
     @Transactional
-    public void withdraw() {
+    public void withdraw()
+    {
         Optional<User> user = SecurityUtil.getCurrentUsername()
                                           .flatMap(userRepository::findByEmail);
         userRepository.delete(user.get());
     }
     
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(String email) {
+    public Optional<User> getUserWithAuthorities(String email)
+    {
         return userRepository.findByEmail(email);
     }
     
     @Transactional(readOnly = true)
-    public Optional<User> getMyUserWithAuthorities() {
+    public Optional<User> getMyUserWithAuthorities()
+    {
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findByEmail);
     }
 }

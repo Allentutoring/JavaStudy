@@ -20,8 +20,7 @@ public class BaseExceptionHandler {
     protected final ErrorAttributeOptions options;
     
     protected Map<String, Object> getErrorAttributes(
-        HttpServletRequest request,
-        ErrorAttributeOptions options
+        HttpServletRequest request, ErrorAttributeOptions options
     )
     {
         WebRequest webRequest = new ServletWebRequest(request);

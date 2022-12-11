@@ -15,12 +15,13 @@ import tutoring.javastudy.base.entity.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Privilege extends BaseEntity implements GrantedAuthority {
-
+    
     @Column(length = 36)
     private String name;
-
+    
     @Override
-    public String getAuthority() {
+    public String getAuthority()
+    {
         return this.name;
     }
 }

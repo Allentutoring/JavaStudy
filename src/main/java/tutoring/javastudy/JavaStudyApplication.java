@@ -6,13 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 public class JavaStudyApplication {
-
-    public static void main(String[] args) {
+    
+    public static void main(String[] args)
+    {
         SpringApplication.run(JavaStudyApplication.class, args);
     }
-
+    
     @GetMapping("/")
-    public String index() {
+    public String index()
+    {
         return "index";
     }
 }

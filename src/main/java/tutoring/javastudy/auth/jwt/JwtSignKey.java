@@ -7,22 +7,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtSignKey implements Key {
-
+    
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
-
+    
     @Override
-    public String getAlgorithm() {
+    public String getAlgorithm()
+    {
         return "RSA";
     }
-
+    
     @Override
-    public String getFormat() {
+    public String getFormat()
+    {
         return "PKCS#8";
     }
-
+    
     @Override
-    public byte[] getEncoded() {
+    public byte[] getEncoded()
+    {
         return Base64.getEncoder().encode(secretKey.getBytes());
     }
 }

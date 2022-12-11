@@ -31,27 +31,32 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 @RequiredArgsConstructor
 @RequestMapping("/api/board/{board}/comment/{comment}/sub-comment")
 public class SubCommentController extends ResourcesController<Comment, CommentRepository> {
-
+    
     private final Convertable converter;
     private final SubCommentService service;
-
+    
     @GetMapping()
     @PreAuthorize("@subCommentPolicy.index(#user, #board, #comment)")
     public ResponseEntity<List<SubCommentResponseDto>> index(
-        @AuthenticationPrincipal User user, @PathVariable("board") Board board,
+        @AuthenticationPrincipal User user,
+        @PathVariable("board") Board board,
         @PathVariable("comment") Comment comment
-    ) {
-        List<SubCommentResponseDto> result = this.service.index(comment).stream()
-            .map(SubCommentResponseDto::new).toList();
+    )
+    {
+        List<SubCommentResponseDto> result = this.service.index(comment)
+                                                         .stream()
+                                                         .map(SubCommentResponseDto::new)
+                                                         .toList();
         return ResponseEntity.ok(result);
     }
-
+    
     @GetMapping("/{subComment}")
     public ResponseEntity<SubCommentResponseDto> show(@PathVariable("subComment") Comment entity)
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.show(entity, SubCommentResponseDto.class);
     }
-
+    
     @Transactional
     @PreAuthorize("hasPermission('comment', 'store') and @subCommentPolicy.store(#user, #board, #comment)")
     @PostMapping()
@@ -61,13 +66,14 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
         @PathVariable("comment") Comment comment,
         @AuthenticationPrincipal User user
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         request.setBoard(board);
         request.setUser(user);
         request.setParent(comment);
         return super.store(Comment.class, request, SubCommentResponseDto.class);
     }
-
+    
     @Transactional
     @PreAuthorize("hasPermission('comment', 'update') and @subCommentPolicy.update(#user, #board, #comment, #subComment)")
     @PutMapping("/{subComment}")
@@ -78,10 +84,11 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
         @PathVariable("subComment") Comment subComment,
         @Valid SubCommentRequestDto request
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.update(comment, request, SubCommentResponseDto.class);
     }
-
+    
     @Transactional
     @PreAuthorize("hasPermission('comment', 'delete') and @subCommentPolicy.delete(#user, #board, #comment, #subComment)")
     @DeleteMapping("/{subComment}")
@@ -91,16 +98,19 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
         @PathVariable("comment") Comment comment,
         @PathVariable("subComment") Comment subComment
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.delete(comment, SubCommentResponseDto.class);
     }
-
+    
     @Override
-    protected SubCommentService getService() {
+    protected SubCommentService getService()
+    {
         return service;
     }
-
-    protected Convertable getConverter() {
+    
+    protected Convertable getConverter()
+    {
         return converter;
     }
 }

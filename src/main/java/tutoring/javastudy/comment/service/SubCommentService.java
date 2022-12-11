@@ -8,12 +8,14 @@ import tutoring.javastudy.comment.repository.CommentRepository;
 
 @Service
 public class SubCommentService extends BaseService<Comment, CommentRepository> {
-
-    public SubCommentService(CommentRepository repository) {
+    
+    public SubCommentService(CommentRepository repository)
+    {
         super(repository);
     }
-
-    public List<Comment> index(Comment comment) {
+    
+    public List<Comment> index(Comment comment)
+    {
         return comment.getSubComments();
     }
 }

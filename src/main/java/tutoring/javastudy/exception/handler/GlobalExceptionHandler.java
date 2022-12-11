@@ -22,53 +22,59 @@ import tutoring.javastudy.exception.BaseException;
 public class GlobalExceptionHandler extends BaseExceptionHandler
     //extends ResponseEntityExceptionHandler
 {
-
-    public GlobalExceptionHandler(ErrorAttributes errorAttributes, ErrorAttributeOptions options) {
+    
+    public GlobalExceptionHandler(ErrorAttributes errorAttributes, ErrorAttributeOptions options)
+    {
         super(errorAttributes, options);
     }
-
+    
     @ExceptionHandler(Exception.class)
     public void handleException(
         HttpServletRequest request, HttpServletResponse response, Exception exception
     )
-        throws IOException {
+    throws IOException
+    {
         response.sendError(HttpStatus.FORBIDDEN.value(), exception.getMessage());
     }
-
+    
     @ExceptionHandler(value = {BaseException.class})
     public void handleException(
         HttpServletRequest request, HttpServletResponse response, BaseException exception
     )
-        throws IOException {
+    throws IOException
+    {
         response.sendError(exception.getHttpStatus().value(), exception.getMessage());
     }
-
+    
     @ExceptionHandler(value = {InvalidJwtTokenException.class})
     public void handleInvalidException(
         HttpServletRequest request, HttpServletResponse response, BaseException exception
     )
-        throws IOException {
+    throws IOException
+    {
         response.sendError(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
     }
-
+    
     @ExceptionHandler(value = BindException.class)
     public void handleValidationException(
         HttpServletRequest request, HttpServletResponse response, BindException exception
     )
-        throws IOException {
+    throws IOException
+    {
         response.sendError(
             HttpStatus.UNPROCESSABLE_ENTITY.value(),
             Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage()
         );
     }
-
+    
     @ExceptionHandler(value = MissingPathVariableException.class)
     public void handleNotFoundException(
         HttpServletRequest request,
         HttpServletResponse response,
         MissingPathVariableException exception
     )
-        throws IOException {
+    throws IOException
+    {
         response.sendError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
     }
 }

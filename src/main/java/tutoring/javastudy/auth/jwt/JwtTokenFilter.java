@@ -19,27 +19,33 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
-
+    
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-
+    
     @SneakyThrows
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest,
-        HttpServletResponse httpServletResponse, FilterChain filterChain)
-        throws ServletException, IOException {
+    protected void doFilterInternal(
+        HttpServletRequest httpServletRequest,
+        HttpServletResponse httpServletResponse,
+        FilterChain filterChain
+    )
+    throws ServletException, IOException
+    {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
-            UserDetails userDetails = userDetailsService.loadUserByUsername(
-                jwtTokenProvider.getUsername(token));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "",
-                userDetails.getAuthorities());
-
+            UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenProvider.getUsername(
+                token));
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                                                                                    "",
+                                                                                    userDetails.getAuthorities()
+            );
+            
             // SecurityContext 에 Authentication 객체를 저장합니다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
-
+    
 }

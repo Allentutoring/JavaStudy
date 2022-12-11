@@ -11,7 +11,7 @@ import tutoring.javastudy.comment.entity.Comment;
 @ToString
 @Data
 public class SubCommentRequestDto extends BaseRequestDto {
-
+    
     @NotBlank
     private String content;
     private User user;

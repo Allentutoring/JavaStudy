@@ -7,7 +7,8 @@ import tutoring.javastudy.base.entity.BaseEntity;
 
 public interface BaseRepository<Entity extends BaseEntity, Var> extends JpaRepository<Entity, Var> {
     
-    public default void softDelete(Entity e) {
+    default void softDelete(Entity e)
+    {
         e.setDeletedAt(Timestamp.valueOf(LocalDateTime.now()));
         this.save(e);
     }

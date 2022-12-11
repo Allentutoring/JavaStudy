@@ -7,16 +7,17 @@ import tutoring.javastudy.board.entity.Board;
 
 @Data
 public class BoardResponseDto extends BaseResponseDto<Board> {
-
+    
     protected long id;
     protected String title;
     protected String content;
     protected String createdAt;
-
+    
     protected List<CommentResponseDto> comments;
-
+    
     @Override
-    public void bindEntity(Board entity) {
+    public void bindEntity(Board entity)
+    {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();

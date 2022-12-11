@@ -13,11 +13,13 @@ import tutoring.javastudy.auth.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-
+    
     private final UserRepository userRepository;
-
+    
     @Override
-    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email)
+    throws UsernameNotFoundException
+    {
         final Optional<User> userEntity = userRepository.findByEmail(email);
         if (userEntity.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
@@ -25,5 +27,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userEntity.get();
         return user;
     }
-
+    
 }

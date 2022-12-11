@@ -13,7 +13,8 @@ public class Converter implements Convertable {
     
     private final ModelMapper modelMapper;
     
-    public Converter(ModelMapper modelMapper) {
+    public Converter(ModelMapper modelMapper)
+    {
         this.modelMapper = modelMapper;
         modelMapper.getConfiguration()
                    .setMethodAccessLevel(AccessLevel.PUBLIC)
@@ -25,23 +26,23 @@ public class Converter implements Convertable {
     }
     
     public <Entity extends BaseEntity> void convertDtoToEntity(
-        BaseRequestDto dto,
-        Entity entity
-    ) {
+        BaseRequestDto dto, Entity entity
+    )
+    {
         modelMapper.map(dto, entity);
     }
     
     public <Entity extends BaseEntity> Entity convertDtoToEntity(
-        BaseRequestDto dto,
-        Class<? extends Entity> entity
-    ) {
+        BaseRequestDto dto, Class<? extends Entity> entity
+    )
+    {
         return modelMapper.map(dto, entity);
     }
     
     public <Dto extends BaseRequestDto> Dto convertEntityToDto(
-        Dto dto,
-        BaseEntity entity
-    ) {
+        Dto dto, BaseEntity entity
+    )
+    {
         modelMapper.map(entity, UserDto.class);
         return dto;
     }

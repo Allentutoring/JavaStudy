@@ -23,24 +23,24 @@ import tutoring.javastudy.board.entity.Board;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends BaseEntity {
-
+    
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
-
+    
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
-
+    
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
+    
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_id")
     private Comment parent;
-
+    
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> subComments;
 }

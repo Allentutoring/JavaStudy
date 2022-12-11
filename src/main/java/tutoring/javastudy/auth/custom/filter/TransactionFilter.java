@@ -15,23 +15,20 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(1)
 public class TransactionFilter implements Filter {
-
+    
     @Override
     public void doFilter(
-        ServletRequest request,
-        ServletResponse response,
-        FilterChain chain) throws IOException, ServletException {
-
+        ServletRequest request, ServletResponse response, FilterChain chain
+    )
+    throws IOException, ServletException
+    {
+        
         HttpServletRequest req = (HttpServletRequest) request;
-        log.info(
-            "Starting a transaction for req : {}",
-            req.getRequestURI());
-
+        log.info("Starting a transaction for req : {}", req.getRequestURI());
+        
         chain.doFilter(request, response);
-        log.info(
-            "Committing a transaction for req : {}",
-            req.getRequestURI());
+        log.info("Committing a transaction for req : {}", req.getRequestURI());
     }
-
+    
     // other methods
 }

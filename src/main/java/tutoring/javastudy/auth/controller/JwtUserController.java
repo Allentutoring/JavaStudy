@@ -23,28 +23,32 @@ import tutoring.javastudy.base.controller.BaseController;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class JwtUserController extends BaseController<User, UserRepository> {
-
+    
     private final UserService userService;
-
+    
     @GetMapping
-    public ResponseEntity<Optional<User>> info() {
+    public ResponseEntity<Optional<User>> info()
+    {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
-
+    
     // @PreAuthorize("isAuthenticated() && #user.id == authentication.principal.id")
     @IsCurrentUser
     @GetMapping("/user/{user}")
-    public ResponseEntity<User> show(@PathVariable("user") User user) {
+    public ResponseEntity<User> show(@PathVariable("user") User user)
+    {
         return ResponseEntity.ok(user);
     }
-
+    
     @PostMapping("/sign/up")
-    public ResponseEntity<User> signUp(@Valid UserDto userDto) {
+    public ResponseEntity<User> signUp(@Valid UserDto userDto)
+    {
         return ResponseEntity.ok(userService.signup(userDto));
     }
-
+    
     @DeleteMapping()
-    public void withdraw() {
+    public void withdraw()
+    {
         userService.withdraw();
     }
 }

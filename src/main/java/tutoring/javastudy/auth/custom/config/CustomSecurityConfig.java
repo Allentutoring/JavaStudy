@@ -23,22 +23,25 @@ import tutoring.javastudy.auth.repository.UserRepository;
 //@ConditionalOnDefaultWebSecurity
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CustomSecurityConfig {
-
+    
     private final UserRepository userRepository;
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
-
+    
     /*
      * Route 설정 및 Custom AuthenticationProvider 설정
      * */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
+    public SecurityFilterChain filterChain(HttpSecurity http)
+    throws Exception
+    {
+        http.authorizeRequests()
             // 페이지 권한 설정
-            .antMatchers("/", "/api/signin", "/api/signup").permitAll()
+            .antMatchers("/", "/api/signin", "/api/signup")
+            .permitAll()
             // redirect to login page if not authenticated
-            .anyRequest().authenticated()
+            .anyRequest()
+            .authenticated()
             .and()
             // 로그인 실행
             .formLogin()
@@ -57,10 +60,12 @@ public class CustomSecurityConfig {
             .deleteCookies("JSESSIONID")
             .permitAll()
             // .logoutSuccessHandler(logoutSuccessHandler());
-            .and().csrf().disable()
-            .authenticationProvider(
-                new CustomAuthenticationProvider(userDetailsService, passwordEncoder))
-        ;
+            .and()
+            .csrf()
+            .disable()
+            .authenticationProvider(new CustomAuthenticationProvider(userDetailsService,
+                                                                     passwordEncoder
+            ));
         return http.build();
     }
 
@@ -93,37 +98,40 @@ public class CustomSecurityConfig {
     Advisor postFilterAuthorizationMethodInterceptor() {
         return new PostFilterAuthorizationMethodInterceptor();
     }*/
-
+    
     @Bean
-    public FilterRegistrationBean<RequestResponseLoggingFilter> loggingFilter() {
-        FilterRegistrationBean<RequestResponseLoggingFilter> registrationBean
-            = new FilterRegistrationBean<>();
-
+    public FilterRegistrationBean<RequestResponseLoggingFilter> loggingFilter()
+    {
+        FilterRegistrationBean<RequestResponseLoggingFilter> registrationBean = new FilterRegistrationBean<>();
+        
         registrationBean.setFilter(new RequestResponseLoggingFilter());
         registrationBean.addUrlPatterns("/users/*");
         registrationBean.setOrder(2);
-
+        
         return registrationBean;
     }
-
+    
     /*
      * loadUserByUsername 함수를 이용하여 username(email) 에 해당하는 user 가 있는지 확인 하는 UserDetailService
      * */
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService()
+    {
         return new CustomUserDetailsService(userRepository);
     }
-
+    
     /*
      * 전역으로 password 방식 설정
      * */
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder()
+    {
         return new BCryptPasswordEncoder();
     }
-
+    
     @Bean
-    public ModelMapper modelMapper() {
+    public ModelMapper modelMapper()
+    {
         return new ModelMapper();
     }
 }

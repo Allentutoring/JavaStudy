@@ -25,7 +25,8 @@ public class UserController {
     private final UserService userService;
     
     @GetMapping("/user")
-    public ResponseEntity<Optional<User>> info() {
+    public ResponseEntity<Optional<User>> info()
+    {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
     
@@ -33,21 +34,23 @@ public class UserController {
     @IsCurrentUser
     @GetMapping("/user/{user}")
     public ResponseEntity<User> othersInfo(
-        Authentication authentication,
-        @PathVariable("user") User user
-    ) {
+        Authentication authentication, @PathVariable("user") User user
+    )
+    {
         
         return ResponseEntity.ok(user);
     }
     
     @Transactional
     @PostMapping("/sign/up")
-    public ResponseEntity<User> signUp(@Valid UserDto userDto) {
+    public ResponseEntity<User> signUp(@Valid UserDto userDto)
+    {
         return ResponseEntity.ok(userService.signup(userDto));
     }
     
     @DeleteMapping("/user")
-    public void withdraw() {
+    public void withdraw()
+    {
         userService.withdraw();
     }
 }

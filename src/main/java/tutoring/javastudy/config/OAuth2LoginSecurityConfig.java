@@ -6,6 +6,7 @@ import tutoring.javastudy.auth.repository.UserRepository;
 //@EnableWebSecurity
 @RequiredArgsConstructor
 public class OAuth2LoginSecurityConfig {
+    
     private final UserRepository userRepository;
 
     /*@Bean

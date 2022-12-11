@@ -7,8 +7,9 @@ import tutoring.javastudy.board.repository.BoardRepository;
 
 @Service
 public class BoardService extends BaseService<Board, BoardRepository> {
-
-    public BoardService(BoardRepository repository) {
+    
+    public BoardService(BoardRepository repository)
+    {
         super(repository);
     }
 }

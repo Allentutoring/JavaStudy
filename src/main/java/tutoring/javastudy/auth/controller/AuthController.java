@@ -25,29 +25,33 @@ import tutoring.javastudy.util.SecurityUtil;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController extends BaseController {
-
+    
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
-
-
+    
+    
     @PostMapping("/sign/in")
-    public ResponseEntity<String> signIn(UserDto dto) throws UserNotFoundException {
+    public ResponseEntity<String> signIn(UserDto dto)
+    throws UserNotFoundException
+    {
         User userDetails = (User) userDetailsService.loadUserByUsername(dto.getEmail());
-
+        
         // password 일치하지 않으면 throw exception
         if (!passwordEncoder.matches(dto.getPassword(), userDetails.getPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
         }
-        return ResponseEntity.ok(
-            jwtTokenProvider.createToken(userDetails.getEmail(), userDetails.getRoles()));
+        return ResponseEntity.ok(jwtTokenProvider.createToken(userDetails.getEmail(),
+                                                              userDetails.getRoles()
+        ));
     }
-
+    
     @GetMapping("/sign/out")
-    public String signOut(HttpServletRequest request, HttpServletResponse response) {
+    public String signOut(HttpServletRequest request, HttpServletResponse response)
+    {
         SecurityUtil.signOut(request, response);
         return "redirect:/";
     }
-
+    
 }

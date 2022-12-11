@@ -7,8 +7,9 @@ import tutoring.javastudy.comment.repository.CommentRepository;
 
 @Service
 public class CommentService extends BaseService<Comment, CommentRepository> {
-
-    public CommentService(CommentRepository repository) {
+    
+    public CommentService(CommentRepository repository)
+    {
         super(repository);
     }
 }
