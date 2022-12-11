@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.ToString;
 import tutoring.javastudy.auth.entity.User;
-import tutoring.javastudy.base.dto.BaseRequestDto;
+import tutoring.javastudy.base.request.BaseRequestDto;
 import tutoring.javastudy.board.entity.Board;
 import tutoring.javastudy.comment.entity.Comment;
 

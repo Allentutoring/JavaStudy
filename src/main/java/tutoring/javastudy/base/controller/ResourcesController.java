@@ -4,13 +4,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import tutoring.javastudy.base.dto.BaseRequestDto;
-import tutoring.javastudy.base.dto.BaseResponseDto;
 import tutoring.javastudy.base.entity.BaseEntity;
 import tutoring.javastudy.base.repository.BaseRepository;
+import tutoring.javastudy.base.request.BaseRequestDto;
+import tutoring.javastudy.base.response.BasePageResponseDto;
+import tutoring.javastudy.base.response.BaseResponseDto;
 import tutoring.javastudy.base.service.BaseService;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
 
@@ -34,6 +37,16 @@ public abstract class ResourcesController<Entity extends BaseEntity, Repository 
             response.bindEntity(e);
             return response;
         }).collect(Collectors.toList()));
+    }
+    
+    public <ResponseDto extends BasePageResponseDto> ResponseEntity<ResponseDto> index(
+        Class<ResponseDto> responseDtoClass, Pageable pageable
+    )
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
+        Page page = getService().index(pageable);
+        ResponseDto response = newInstance(responseDtoClass, page);
+        return ResponseEntity.ok(response);
     }
     
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseEntity<ResponseDto> show(
@@ -79,6 +92,12 @@ public abstract class ResourcesController<Entity extends BaseEntity, Repository 
     throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
     {
         return cls.getDeclaredConstructor().newInstance();
+    }
+    
+    private <Instance> Instance newInstance(Class<Instance> cls, Page page)
+    throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+    {
+        return cls.getDeclaredConstructor(page.getClass()).newInstance(page);
     }
     
     public <ResponseDto extends BaseResponseDto<Entity>> ResponseDto createResponseInstance(

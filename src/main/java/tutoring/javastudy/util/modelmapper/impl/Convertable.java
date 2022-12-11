@@ -1,7 +1,7 @@
 package tutoring.javastudy.util.modelmapper.impl;
 
-import tutoring.javastudy.base.dto.BaseRequestDto;
 import tutoring.javastudy.base.entity.BaseEntity;
+import tutoring.javastudy.base.request.BaseRequestDto;
 
 public interface Convertable {
     

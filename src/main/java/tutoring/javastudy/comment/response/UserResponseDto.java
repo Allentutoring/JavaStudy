@@ -2,7 +2,7 @@ package tutoring.javastudy.comment.response;
 
 import lombok.Data;
 import tutoring.javastudy.auth.entity.User;
-import tutoring.javastudy.base.dto.BaseResponseDto;
+import tutoring.javastudy.base.response.BaseResponseDto;
 
 @Data
 public class UserResponseDto extends BaseResponseDto<User> {

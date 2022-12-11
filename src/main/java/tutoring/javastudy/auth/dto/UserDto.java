@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
-import tutoring.javastudy.base.dto.BaseRequestDto;
+import tutoring.javastudy.base.request.BaseRequestDto;
 
 @Data
 @AllArgsConstructor

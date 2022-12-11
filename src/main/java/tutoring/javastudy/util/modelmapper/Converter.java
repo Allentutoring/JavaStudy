@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.stereotype.Component;
 import tutoring.javastudy.auth.dto.UserDto;
-import tutoring.javastudy.base.dto.BaseRequestDto;
 import tutoring.javastudy.base.entity.BaseEntity;
+import tutoring.javastudy.base.request.BaseRequestDto;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
 
 @Component
