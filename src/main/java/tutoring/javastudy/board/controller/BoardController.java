@@ -42,12 +42,6 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
         return super.index(BoardPageResponseDto.class, pageable);
     }
     
-    /*@GetMapping
-    public ResponseEntity<List<BoardResponseDto>> index()
-    {
-        return super.index(BoardResponseDto.class);
-    }*/
-    
     @GetMapping("/{id}")
     public ResponseEntity<BoardDetailResponseDto> show(
         @PathVariable("id") Board entity

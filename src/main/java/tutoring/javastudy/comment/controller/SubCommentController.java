@@ -1,10 +1,10 @@
 package tutoring.javastudy.comment.controller;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +22,7 @@ import tutoring.javastudy.board.entity.Board;
 import tutoring.javastudy.comment.entity.Comment;
 import tutoring.javastudy.comment.repository.CommentRepository;
 import tutoring.javastudy.comment.request.SubCommentRequestDto;
+import tutoring.javastudy.comment.response.SubCommentPageResponseDto;
 import tutoring.javastudy.comment.response.SubCommentResponseDto;
 import tutoring.javastudy.comment.service.SubCommentService;
 import tutoring.javastudy.util.modelmapper.impl.Convertable;
@@ -37,17 +38,17 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
     
     @GetMapping()
     @PreAuthorize("@subCommentPolicy.index(#user, #board, #comment)")
-    public ResponseEntity<List<SubCommentResponseDto>> index(
+    public ResponseEntity<SubCommentPageResponseDto> index(
         @AuthenticationPrincipal User user,
         @PathVariable("board") Board board,
-        @PathVariable("comment") Comment comment
+        @PathVariable("comment") Comment comment,
+        Pageable pageable
     )
     {
-        List<SubCommentResponseDto> result = this.service.index(comment)
-                                                         .stream()
-                                                         .map(SubCommentResponseDto::new)
-                                                         .toList();
-        return ResponseEntity.ok(result);
+        SubCommentPageResponseDto responseDto = new SubCommentPageResponseDto(this.service.index(comment,
+                                                                                                 pageable
+        ));
+        return ResponseEntity.ok(responseDto);
     }
     
     @GetMapping("/{subComment}")
