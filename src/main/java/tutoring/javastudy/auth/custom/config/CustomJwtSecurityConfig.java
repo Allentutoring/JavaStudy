@@ -26,8 +26,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tutoring.javastudy.auth.custom.service.CustomUserDetailsService;
 import tutoring.javastudy.auth.jwt.JwtSignKey;
-import tutoring.javastudy.auth.jwt.JwtTokenFilter;
 import tutoring.javastudy.auth.jwt.JwtTokenProvider;
+import tutoring.javastudy.auth.jwt.filter.JwtExceptionFilter;
+import tutoring.javastudy.auth.jwt.filter.JwtTokenFilter;
 import tutoring.javastudy.auth.repository.UserRepository;
 import tutoring.javastudy.base.permission.CustomMethodSecurityExpressionHandler;
 import tutoring.javastudy.base.permission.CustomPermissionEvaluator;
@@ -54,24 +55,26 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
      * */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)
-    throws Exception
-    {
-        http.csrf().disable().httpBasic().disable()
+        throws Exception {
+        http.csrf()
+            .disable()
+            .httpBasic()
+            .disable()
 //            .authorizeRequests()
             // 페이지 권한 설정
 //            .antMatchers("/", "/api/sign/in", "/api/sign/up").permitAll()
 //            .anyRequest().authenticated()
 //            .and()
-            .addFilterBefore(
-                new JwtTokenFilter(jwtTokenProvider, userDetailsService),
-                UsernamePasswordAuthenticationFilter.class
-            ).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtExceptionFilter(), jwtTokenFilter().getClass())
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        
         return http.build();
     }
     
     @Override
-    protected MethodSecurityExpressionHandler createExpressionHandler()
-    {
+    protected MethodSecurityExpressionHandler createExpressionHandler() {
         CustomMethodSecurityExpressionHandler expressionHandler = new CustomMethodSecurityExpressionHandler();
         expressionHandler.setApplicationContext(applicationContext);
         expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
@@ -79,17 +82,25 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
     }
     
     @Bean
-    public Key jwtKey()
-    {
+    public Key jwtKey() {
         return new JwtSignKey();
+    }
+    
+    @Bean
+    public JwtTokenFilter jwtTokenFilter() {
+        return new JwtTokenFilter(jwtTokenProvider, userDetailsService);
+    }
+    
+    @Bean
+    public JwtExceptionFilter jwtExceptionFilter() {
+        return new JwtExceptionFilter(errorAttributeOptions());
     }
     
     /*
      * loadUserByUsername 함수를 이용하여 username(email) 에 해당하는 user 가 있는지 확인 하는 UserDetailService
      * */
     @Bean
-    public UserDetailsService userDetailsService()
-    {
+    public UserDetailsService userDetailsService() {
         return new CustomUserDetailsService(userRepository);
     }
     
@@ -97,26 +108,22 @@ public class CustomJwtSecurityConfig extends GlobalMethodSecurityConfiguration {
      * 전역으로 password 방식 설정
      * */
     @Bean
-    public PasswordEncoder passwordEncoder()
-    {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
     
     @Bean
-    public ModelMapper modelMapper()
-    {
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
     
     @Bean
-    public Convertable convertable()
-    {
+    public Convertable convertable() {
         return new Converter(modelMapper());
     }
     
     @Bean
-    public ErrorAttributeOptions errorAttributeOptions()
-    {
+    public ErrorAttributeOptions errorAttributeOptions() {
         List<Include> includes = new ArrayList<>();
         includes.add(Include.EXCEPTION);
         includes.add(Include.BINDING_ERRORS);

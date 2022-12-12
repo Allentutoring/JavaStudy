@@ -37,13 +37,11 @@ public class JwtTokenProvider {
     // private final UserDetailsService userDetailsService;
     
     @PostConstruct
-    protected void init()
-    {
+    protected void init() {
         jwtKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
     
-    public String createToken(String username, List<Role> appUserRoles)
-    {
+    public String createToken(String username, List<Role> appUserRoles) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", appUserRoles);
         
@@ -59,8 +57,7 @@ public class JwtTokenProvider {
                    .compact();
     }
     
-    public String getUsername(String token)
-    {
+    public String getUsername(String token) {
         return Jwts.parserBuilder()
                    .setSigningKey(jwtKey)
                    .build()
@@ -69,8 +66,7 @@ public class JwtTokenProvider {
                    .getSubject();
     }
     
-    public String resolveToken(HttpServletRequest req)
-    {
+    public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
@@ -79,8 +75,7 @@ public class JwtTokenProvider {
     }
     
     public boolean validateToken(String jwtToken)
-    throws InvalidJwtTokenException
-    {
+        throws InvalidJwtTokenException {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                                      .setSigningKey(jwtKey)

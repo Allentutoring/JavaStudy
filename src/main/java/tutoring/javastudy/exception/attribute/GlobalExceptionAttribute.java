@@ -19,14 +19,13 @@ import tutoring.javastudy.exception.BaseException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionAttribute implements ErrorAttributes {
     
-    private static final String ERROR_INTERNAL_ATTRIBUTE =
+    public static final String ERROR_INTERNAL_ATTRIBUTE =
         GlobalExceptionAttribute.class.getName() + ".ERROR";
     
     @Override
     public Map<String, Object> getErrorAttributes(
         WebRequest webRequest, ErrorAttributeOptions options
-    )
-    {
+    ) {
         Map<String, Object> errorAttributes = new LinkedHashMap<>();
         errorAttributes.put("timestamp", new Date());
         addStatus(errorAttributes, webRequest);
@@ -37,8 +36,7 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
     
     protected void addStatus(
         Map<String, Object> errorAttributes, WebRequest webRequest
-    )
-    {
+    ) {
         Integer status = getAttribute(webRequest, RequestDispatcher.ERROR_STATUS_CODE);
         if (status == null) {
             errorAttributes.put("status", 999);
@@ -60,8 +58,7 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
         }
     }
     
-    protected void addErrorMessage(Map<String, Object> errorAttributes, WebRequest webRequest)
-    {
+    protected void addErrorMessage(Map<String, Object> errorAttributes, WebRequest webRequest) {
         Throwable error = getError(webRequest);
         if (error != null) {
             while (error instanceof ServletException && error.getCause() != null) {
@@ -74,8 +71,7 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
     
     protected void addExceptionErrorMessage(
         Map<String, Object> errorAttributes, WebRequest webRequest, Throwable error
-    )
-    {
+    ) {
         errorAttributes.put("message", getMessage(webRequest, error));
     }
     
@@ -93,8 +89,7 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
      * @return message to include in the error attributes
      * @since 2.4.0
      */
-    protected String getMessage(WebRequest webRequest, Throwable error)
-    {
+    protected String getMessage(WebRequest webRequest, Throwable error) {
         Object message = getAttribute(webRequest, RequestDispatcher.ERROR_MESSAGE);
         if (!ObjectUtils.isEmpty(message)) {
             return message.toString();
@@ -110,8 +105,9 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
         
     }
     
-    protected void addPath(Map<String, Object> errorAttributes, RequestAttributes requestAttributes)
-    {
+    protected void addPath(
+        Map<String, Object> errorAttributes, RequestAttributes requestAttributes
+    ) {
         String path = getAttribute(requestAttributes, RequestDispatcher.ERROR_REQUEST_URI);
         if (path != null) {
             errorAttributes.put("path", path);
@@ -119,8 +115,7 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
     }
     
     @Override
-    public Throwable getError(WebRequest webRequest)
-    {
+    public Throwable getError(WebRequest webRequest) {
         Throwable exception = getAttribute(webRequest, ERROR_INTERNAL_ATTRIBUTE);
         if (exception == null) {
             exception = getAttribute(webRequest, RequestDispatcher.ERROR_EXCEPTION);
@@ -134,8 +129,7 @@ public class GlobalExceptionAttribute implements ErrorAttributes {
         return exception;
     }
     
-    private <T> T getAttribute(RequestAttributes requestAttributes, String name)
-    {
+    private <T> T getAttribute(RequestAttributes requestAttributes, String name) {
         return (T) requestAttributes.getAttribute(name, RequestAttributes.SCOPE_REQUEST);
     }
 }

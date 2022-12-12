@@ -13,19 +13,15 @@ import tutoring.javastudy.util.modelmapper.impl.Convertable;
 @RequiredArgsConstructor
 public abstract class BaseController<Entity extends BaseEntity, Repository extends BaseRepository> {
     
-    
-    protected Entity getEntity()
-    {
+    protected Entity getEntity() {
         return null;
     }
     
-    protected BaseService<Entity, Repository> getService()
-    {
+    protected BaseService<Entity, Repository> getService() {
         return null;
     }
     
-    protected Convertable getConverter()
-    {
+    protected Convertable getConverter() {
         return null;
     }
 }
