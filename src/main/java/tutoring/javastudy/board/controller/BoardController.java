@@ -48,13 +48,26 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
         return super.index(BoardPageResponseDto.class, pageable);
     }
     
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public ResponseEntity<BoardDetailResponseDto> show(
         @PathVariable("id") Board entity
     )
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         return super.show(entity, BoardDetailResponseDto.class);
+    }*/
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<BoardDetailResponseDto> show(
+        @PathVariable("id") Board board,
+        @SortDefault.SortDefaults({@SortDefault(sort = "id", direction = Direction.DESC)})
+        Pageable pageable
+    )
+    {
+        BoardDetailResponseDto responseDto = new BoardDetailResponseDto(board,
+                                                                        getService().index(pageable)
+        );
+        return ResponseEntity.ok(responseDto);
     }
     
     @Transactional

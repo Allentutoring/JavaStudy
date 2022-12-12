@@ -5,6 +5,8 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,7 +44,9 @@ public class SubCommentController extends ResourcesController<Comment, CommentRe
         @AuthenticationPrincipal User user,
         @PathVariable("board") Board board,
         @PathVariable("comment") Comment comment,
-        Pageable pageable
+        @SortDefault.SortDefaults({
+            @SortDefault(sort = "id", direction = Direction.DESC)
+        }) Pageable pageable
     )
     {
         SubCommentPageResponseDto responseDto = new SubCommentPageResponseDto(this.service.index(comment,

@@ -5,6 +5,8 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,7 +41,9 @@ public class CommentController extends ResourcesController<Comment, CommentRepos
     @GetMapping()
     @PreAuthorize("@commentPolicy.index(#user, #board)")
     public ResponseEntity<CommentPageResponseDto> index(
-        @AuthenticationPrincipal User user, @PathVariable("board") Board board, Pageable pageable
+        @SortDefault.SortDefaults({
+            @SortDefault(sort = "id", direction = Direction.DESC)
+        }) Pageable pageable, @AuthenticationPrincipal User user, @PathVariable("board") Board board
     )
     throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {

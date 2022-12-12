@@ -3,6 +3,7 @@ package tutoring.javastudy.base.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import tutoring.javastudy.base.dto.BaseDto;
@@ -20,20 +21,34 @@ public abstract class BasePageResponseDto<Entity extends BaseEntity, ResponseDto
     protected int size;
     @JsonProperty
     protected int page;
-    protected PageImpl<Entity> pageImpl;
+    protected Page<Entity> pageImpl;
     @JsonProperty
     protected List<ResponseDto> content;
     protected Sort sort;
     
+    public BasePageResponseDto(Page<Entity> page)
+    {
+        this.bindEntity(page);
+    }
+    
     public BasePageResponseDto(PageImpl<Entity> pageImpl)
     {
-        this.pageImpl = pageImpl;
-        this.page = pageImpl.getPageable().getPageNumber();
-        this.sort = pageImpl.getSort();
-        this.totalPages = pageImpl.getTotalPages();
-        this.total = pageImpl.getTotalElements();
-        this.size = pageImpl.getSize();
-        this.content = pageImpl.getContent().stream().map((this::bindEntity)).toList();
+        this.bindEntity(pageImpl);
+    }
+    
+    protected void bindEntity(Page<Entity> page)
+    {
+        this.pageImpl = page;
+        this.page = page.getPageable()
+                        .getPageNumber();
+        this.sort = page.getSort();
+        this.totalPages = page.getTotalPages();
+        this.total = page.getTotalElements();
+        this.size = page.getSize();
+        this.content = page.getContent()
+                           .stream()
+                           .map((this::bindEntity))
+                           .toList();
     }
     
     abstract public ResponseDto bindEntity(Entity entity);

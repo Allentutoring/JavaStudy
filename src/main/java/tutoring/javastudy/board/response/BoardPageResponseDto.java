@@ -2,6 +2,7 @@ package tutoring.javastudy.board.response;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import tutoring.javastudy.base.response.BasePageResponseDto;
 import tutoring.javastudy.board.entity.Board;
@@ -9,6 +10,11 @@ import tutoring.javastudy.board.entity.Board;
 @Data
 @SuperBuilder
 public class BoardPageResponseDto extends BasePageResponseDto<Board, BoardResponseDto> {
+    
+    public BoardPageResponseDto(Page<Board> page)
+    {
+        super(page);
+    }
     
     public BoardPageResponseDto(PageImpl<Board> pageImpl)
     {
