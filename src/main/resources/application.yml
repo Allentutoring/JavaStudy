@@ -21,6 +21,16 @@ spring:
     defer-datasource-initialization: true
     database: mysql
     show-sql: true
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        one-indexed-parameters: false
+        max-page-size: 2000
+        page-parameter: page
+        size-parameter: size
+        prefix:
+        qualifier-delimiter: _
 security:
   jwt:
     token:

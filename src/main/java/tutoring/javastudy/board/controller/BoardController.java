@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,9 +38,13 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     private final BoardService service;
     
     @GetMapping
-    public ResponseEntity<BoardPageResponseDto> index(Pageable pageable)
-        throws InvocationTargetException, InstantiationException, IllegalAccessException,
-               NoSuchMethodException {
+    public ResponseEntity<BoardPageResponseDto> index(
+        @SortDefault.SortDefaults({
+            @SortDefault(sort = "id", direction = Direction.DESC)
+        }) Pageable pageable
+    )
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.index(BoardPageResponseDto.class, pageable);
     }
     
@@ -46,8 +52,8 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     public ResponseEntity<BoardDetailResponseDto> show(
         @PathVariable("id") Board entity
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException,
-               NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.show(entity, BoardDetailResponseDto.class);
     }
     
@@ -57,8 +63,8 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     public ResponseEntity<BoardResponseDto> store(
         BoardRequestDto board, @AuthenticationPrincipal User user
     )
-        throws InstantiationException, IllegalAccessException, InvocationTargetException,
-               NoSuchMethodException {
+    throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    {
         board.setUser(user);
         return super.store(Board.class, board, BoardResponseDto.class);
     }
@@ -69,8 +75,8 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     public ResponseEntity<BoardResponseDto> update(
         @AuthenticationPrincipal User user, @PathVariable("id") Board board, BoardRequestDto request
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException,
-               NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.update(board, request, BoardResponseDto.class);
     }
     
@@ -80,17 +86,19 @@ public class BoardController extends ResourcesController<Board, BoardRepository>
     public ResponseEntity<BoardResponseDto> delete(
         @AuthenticationPrincipal User user, @PathVariable("id") Board board
     )
-        throws InvocationTargetException, InstantiationException, IllegalAccessException,
-               NoSuchMethodException {
+    throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    {
         return super.delete(board, BoardResponseDto.class);
     }
     
     @Override
-    protected BoardService getService() {
+    protected BoardService getService()
+    {
         return service;
     }
     
-    protected Convertable getConverter() {
+    protected Convertable getConverter()
+    {
         return convertable;
     }
 }
